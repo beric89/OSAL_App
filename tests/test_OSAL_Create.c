@@ -10,12 +10,12 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGHT];
+// static char filePath[OSAL_PATH_MAX_LENGTH];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(filePath, addressD);
-    strcat(filePath, OSAL_FILE_NAME);
+    // strcpy(filePath, addressD);
+    // strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -114,6 +114,29 @@ void testOSAL_Create_duplicate() {
     CloseHandle(file);
     CloseHandle(file1);
     DeleteFileA(filePath);
+}
+
+void testOSAL_Create_file_with_relative_path_correct() {
+    char fileName[OSAL_FILE_NAME_MAX_LENGHT] = "FolderA\\";
+    strcat(filePath, OSAL_FILE_NAME);
+    char* fileAccess = "r";
+    // if neccessary create FolderA here
+    HANDLE* file = OSAL_Create(fileName, fileAccess);
+    CU_ASSERT_PTR_NOT_NULL(file);
+    CloseHandle(file);
+    DeleteFileA(fileName);
+}
+
+void testOSAL_Create_file_with_absolute_path_correct() {
+    char[OSAL_FILE_NAME_MAX_LENGHT] fileName = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "FolderA\\");
+    strcat(filePath, OSAL_FILE_NAME);
+    char* fileAccess = "r";
+    // if neccessary create FolderA here
+    HANDLE* file = OSAL_Create(fileName, fileAccess);
+    CU_ASSERT_PTR_NOT_NULL(file);
+    CloseHandle(file);
+    DeleteFileA(fileName);
 }
 
 int main() {

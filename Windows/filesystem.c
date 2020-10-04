@@ -19,7 +19,7 @@ static OSAL_ReturnType accessValidation(char *access){
     {
         return OSAL_OK;
     }
-    else 
+    else
     {
         return OSAL_FAIL;
     }
@@ -28,7 +28,7 @@ static OSAL_ReturnType accessValidation(char *access){
 static OSAL_ReturnType checkIfFileExists(char* fileName){
     char fname[OSAL_FILE_NAME_MAX_LENGHT];
     strcpy(fname, fileName);
-    char filePathExists[OSAL_PATH_MAX_LENGHT] = "cd ";
+    char filePathExists[OSAL_PATH_MAX_LENGTH] = "cd ";
     strcat(filePathExists, addressD);
     strcat(filePathExists, " && IF EXIST ");
     strcat(filePathExists, fname);
@@ -45,7 +45,7 @@ static OSAL_ReturnType checkIfFileExists(char* fileName){
 }
 
 static OSAL_ReturnType checkIfDirectoryExists(char* directoryName, char* path){
-    char directoryPathExists[OSAL_PATH_MAX_LENGHT] = "cd ";
+    char directoryPathExists[OSAL_PATH_MAX_LENGTH] = "cd ";
     strcat(directoryPathExists, address);
     strcat(directoryPathExists, path);
     strcat(directoryPathExists, " && IF EXIST ");
@@ -94,15 +94,20 @@ static DWORD setFileAccess(char* access, DWORD* generic)
     return fileShareWrite;
 }
 
-static void makeAddress(char* addressP, char* name)
+static void makePath(char* filePath, char* name)
 {
-    strcpy(addressP, addressD);
-    strcat(addressP, name);
+    if(strstr(name, OSAL_APIINIT_ADDRESS) == NULL) {
+        strcpy(filePath, OSAL_APIINIT_ADDRESS);
+        strcat(filePath, name);
+    } else {
+        strcat(filePath, name);
+    }
 }
 
-static char* makePath(char* path)
+// Handling case when spaces are present in a path.
+static char* convertPath(char* path)
 {
-    static char newPath[OSAL_PATH_MAX_LENGHT];
+    static char newPath[OSAL_PATH_MAX_LENGTH];
     char newc = '\\';
     char old = ' ';
     int i = 0, j = 0;
@@ -115,7 +120,7 @@ static char* makePath(char* path)
         }
         else
         {
-            newPath[j++] = path[i];   
+            newPath[j++] = path[i];
         }
         i++;
     }
@@ -124,8 +129,8 @@ static char* makePath(char* path)
 }
 
 HANDLE* OSAL_Create(char* name,char* access){
-    char fileAddress[OSAL_PATH_MAX_LENGHT];
-    makeAddress(fileAddress, name);
+    char filePath[OSAL_PATH_MAX_LENGTH];
+    makePath(filePath, name);
     if (nameValidation(name) == OSAL_FAIL)
     {
         return NULL;
@@ -138,13 +143,13 @@ HANDLE* OSAL_Create(char* name,char* access){
     {
         return NULL;
     }
-    
+
     DWORD generic;
-    DWORD fileShareWrite = setFileAccess(access, &generic);  
+    DWORD fileShareWrite = setFileAccess(access, &generic);
     HANDLE file = CreateFile(
         fileAddress,
         generic,
-        fileShareWrite, 
+        fileShareWrite,
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
@@ -164,13 +169,13 @@ OSAL_ReturnType OSAL_ConsoleFileOpen(char* fileName){
     {
         return OSAL_FAIL;
     }
-    
+
     if (checkIfFileExists(fileName) != OSAL_OK)
     {
         return OSAL_FAIL;
     }
-    
-    char filePath[OSAL_PATH_MAX_LENGHT] = "cd ";
+
+    char filePath[OSAL_PATH_MAX_LENGTH] = "cd ";
     strcat(filePath, addressD);
     strcat(filePath, " && ");
     strcat(filePath, fileName);
@@ -189,12 +194,12 @@ OSAL_ReturnType OSAL_Remove(char* name){
     {
         return OSAL_FAIL;
     }
-    
+
     if (checkIfFileExists(name) != OSAL_OK)
     {
         return OSAL_FAIL;
     }
-    char file[OSAL_PATH_MAX_LENGHT];
+    char file[OSAL_PATH_MAX_LENGTH];
     strcpy(file, addressD);
     strcat(file, name);
     if(DeleteFileA(file) == 0)
@@ -221,22 +226,22 @@ HANDLE* OSAL_Open(char* name, char* access)
     {
         return NULL;
     }
-   
-    char addressP[OSAL_PATH_MAX_LENGHT];
-    makeAddress(addressP, name);
-    
+
+    char filePath[OSAL_PATH_MAX_LENGTH];
+    makePath(filePath, name);
+
     DWORD generic;
-    DWORD fileShareWrite = setFileAccess(access, &generic);    
- 
+    DWORD fileShareWrite = setFileAccess(access, &generic);
+
     HANDLE File = CreateFile(
-        addressP,
+        filePath,
         generic,
-        fileShareWrite, 
+        fileShareWrite,
         NULL,
         OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL,
         NULL);
- 
+
     if(checkFileHandle(File) == OSAL_OK)
     {
         return File;
@@ -244,7 +249,7 @@ HANDLE* OSAL_Open(char* name, char* access)
     else
     {
         return NULL;
-    }  
+    }
 }
 
 OSAL_ReturnType OSAL_Close(HANDLE* file)
@@ -257,7 +262,7 @@ OSAL_ReturnType OSAL_Close(HANDLE* file)
     {
         return OSAL_OK;
     }
-    
+
 }
 
 OSAL_ReturnType OSAL_Write(HANDLE* file, char* buffer)
@@ -266,10 +271,10 @@ OSAL_ReturnType OSAL_Write(HANDLE* file, char* buffer)
     {
         return OSAL_FAIL;
     }
-    
+
     DWORD dwBytesToWrite = (DWORD)strlen(buffer);
     DWORD dwBytesWritten = 0;
-    
+
     int writeResult = WriteFile(
                     file,
                     buffer,
@@ -317,27 +322,28 @@ OSAL_ReturnType OSAL_Read(HANDLE* File, char* buffer, int numberOfBytesToRead, i
 
 OSAL_ReturnType OSAL_CreateDirectory(char* name, char* path)
 {
-    char* directoryPath = makePath(path);
+    char* directoryPath = convertPath(path);
     if (nameValidation(name) != OSAL_OK)
     {
         return OSAL_FAIL;
     }
-    
+
     if (checkIfDirectoryExists(name, directoryPath) == OSAL_OK)
     {
         return OSAL_FAIL;
     }
-   
-    char pathName[OSAL_PATH_MAX_LENGHT];
-    strcpy(pathName, addressD);
-    strcat(pathName, directoryPath);
-    strcat(pathName, name);
+
+    char pathName[OSAL_PATH_MAX_LENGTH];
+    //TODO: zamijeniti sa makePath() pozivom ovo ispod sto sam zakomentarisao
+    // strcpy(pathName, addressD);
+    // strcat(pathName, directoryPath);
+    // strcat(pathName, name);
     if(CreateDirectoryA(pathName, NULL))
     {
-        memset(addressD, 0, strlen(addressD));
-        strcpy(addressD, pathName);
-        strcat(addressD, "\\");
-        
+        // TODO: u tom slucaju nema potrebe za ovim rucnim postavljanjem
+        // memset(addressD, 0, strlen(addressD));
+        // strcpy(addressD, pathName);
+        // strcat(addressD, "\\");
         return OSAL_OK;
     }
     else
@@ -348,7 +354,7 @@ OSAL_ReturnType OSAL_CreateDirectory(char* name, char* path)
 
 OSAL_ReturnType OSAL_RemoveDirectory(char* name, char* path)
 {
-    char* directoryPath = makePath(path);
+    char* directoryPath = convertPath(path);
     if (nameValidation(name) != OSAL_OK)
     {
         return OSAL_FAIL;
@@ -357,7 +363,7 @@ OSAL_ReturnType OSAL_RemoveDirectory(char* name, char* path)
     {
         return OSAL_FAIL;
     }
-    char pathName[OSAL_PATH_MAX_LENGHT] = "cd ";
+    char pathName[OSAL_PATH_MAX_LENGTH] = "cd ";
     strcat(pathName, address);
     strcat(pathName, directoryPath);
     strcat(pathName, " && rmdir ");
@@ -377,7 +383,7 @@ OSAL_ReturnType OSAL_RemoveDirectory(char* name, char* path)
 
 OSAL_ReturnType OSAL_OpenDirectory(char* name, char* path)
 {
-    char* directoryPath = makePath(path);
+    char* directoryPath = convertPath(path);
     if (nameValidation(name) != OSAL_OK)
     {
         return OSAL_FAIL;

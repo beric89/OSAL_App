@@ -5,10 +5,10 @@
 #define OSAL_APIINIT_VALUE_FALSE -1
 #define OSAL_APIINIT_ADDRESS "C:\\Temp\\"
 #define OSAL_DIRECTORY_EXISTS 2
-#define OSAL_PATH_MAX_LENGHT 200
+#define OSAL_PATH_MAX_LENGTH 200
 #define OSAL_PRINTF_TEXT_MAX_LENGTH 200
 #define OSAL_FILE_NAME_MIN_LENGHT 0
-#define OSAL_FILE_NAME_MAX_LENGHT 50
+#define OSAL_FILE_NAME_MAX_LENGHT 200
 #define OSAL_TRUE 1
 #define OSAL_FALSE 0
 
@@ -26,8 +26,8 @@ typedef enum {
 
 
 OSAL_ConsoleEnableType consoleEnabled;
-char address[OSAL_PATH_MAX_LENGHT];
-char addressD[OSAL_PATH_MAX_LENGHT];
+char address[OSAL_PATH_MAX_LENGTH];
+char addressD[OSAL_PATH_MAX_LENGTH];
 OSAL_ReturnType OSAL_APIInit (void);
 
 #endif // OSAL_API_INIT_H

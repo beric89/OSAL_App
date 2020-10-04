@@ -19,11 +19,11 @@ extern "C" {
 #endif
     
 #define OSAL_FILE_NAME "test.txt"
-#define OSAL_DIRECORY_NAME "TESTtest"
+#define OSAL_DIRECTORY_NAME "TESTtest"
 #define OSAL_PRINTF_STRING "test test test"
 #define OSAL_READ_TEXT_CORRECT "TEST TEST TEST TEST!"
 #define OSAL_WRITE_TEXT "Test test test test!"
-#define OSAL_READ_POSITION_WORSE 50
+#define OSAL_READ_POSITION_WRONG 50
 #define OSAL_READ_POSITION_CORRECT 5
 
 #include <stdio.h>

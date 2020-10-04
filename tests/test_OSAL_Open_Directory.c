@@ -10,12 +10,12 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGHT];
+static char filePath[OSAL_PATH_MAX_LENGTH];
 
 int init_suite(void) {
     OSAL_APIInit();
     strcpy(filePath, addressD);
-    strcat(filePath, OSAL_DIRECORY_NAME);
+    strcat(filePath, OSAL_DIRECTORY_NAME);
     return 0;
 }
 
@@ -25,7 +25,7 @@ int clean_suite(void) {
 
 void testOSAL_Open_Directory_correct() {
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
-    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECORY_NAME, ""), OSAL_OK);
+    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECTORY_NAME, ""), OSAL_OK);
     CU_ASSERT_TRUE(RemoveDirectoryA(filePath));
 }
 
@@ -34,11 +34,11 @@ void testOSAL_Open_Directory_file_name_and_path_missing() {
 }
 
 void testOSAL_Open_Directory_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECORY_NAME, ""), OSAL_FAIL);
+    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECTORY_NAME, ""), OSAL_FAIL);
 }
 
 void testOSAL_Open_Directory_path_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECORY_NAME, "Test test"), OSAL_FAIL);
+    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECTORY_NAME, "Test test"), OSAL_FAIL);
 }
 
 int main() {

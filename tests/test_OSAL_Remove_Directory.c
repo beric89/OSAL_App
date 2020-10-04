@@ -10,12 +10,12 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGHT];
+static char filePath[OSAL_PATH_MAX_LENGTH];
 
 int init_suite(void) {
     OSAL_APIInit();
     strcpy(filePath, addressD);
-    strcat(filePath, OSAL_DIRECORY_NAME);
+    strcat(filePath, OSAL_DIRECTORY_NAME);
     return 0;
 }
 
@@ -23,13 +23,14 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: Bolje nazive za testove. Pogledati test OSAL_Create komentare
 void testOSAL_Remove_Directory_correct() {
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
-    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECORY_NAME, ""), OSAL_OK);
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECTORY_NAME, ""), OSAL_OK);
 }
 
 void testOSAL_Remove_Directory_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECORY_NAME, ""), OSAL_FAIL);
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECTORY_NAME, ""), OSAL_FAIL);
 }
 
 void testOSAL_Remove_Directory_name_too_short() {
@@ -41,7 +42,7 @@ void testOSAL_Remove_Directory_multy_folders_correct() {
     strcat(filePath, "\\p");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     CU_ASSERT_EQUAL(OSAL_RemoveDirectory("p", "TESTtest"), OSAL_OK);    
-    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECORY_NAME, ""), OSAL_OK); 
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECTORY_NAME, ""), OSAL_OK); 
 }
 
 void testOSAL_Remove_Directory_path_not_exists() {
