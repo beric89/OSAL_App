@@ -8,8 +8,10 @@
 #include <string.h>
 
 int OSAL_APIInit (void){
-    en_dis = OSAL_APIInit_value_TRUE;
+    // pogledati OSALInit.h komentar za enum
+    en_dis = OSAL_CONSOLE_ENABLED;
     strcpy(address, OSAL_APIInit_address);
     strcpy(addressD, OSAL_APIInit_address);
-    return OSAL_Test_PASS;
+    // TODO: Koristiti nesto sto nece imati naziv test u sebi. Npr:
+    return OSAL_OK;
 }

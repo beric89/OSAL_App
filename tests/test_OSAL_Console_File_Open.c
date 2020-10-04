@@ -28,6 +28,7 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: Trebaju bolji/deskriptivniji nazivi za testove (Izbjegavati numerisanje 1, 2, 3) 
 void testOSAL_File_Open_worse() {
     char* name = "test4.txt";
     CU_ASSERT_EQUAL(OSAL_Console_File_Open(name), OSAL_Test_FAIL);
@@ -44,12 +45,17 @@ void testOSAL_File_Open_worse2() {
 }
 
 void testOSAL_File_Open_correct() {
-    char* name,* access;
+    char* name;
+    char* access;
     name = OSAL_File_name;
     access = "r";
     HANDLE* result = OSAL_Create(name, access);
     CloseHandle(result);
     CU_ASSERT_EQUAL(OSAL_Console_File_Open(name), OSAL_Test_PASS);
+    // BITNO BITNO BITNO
+    // TODO: Ovo je generalno opasno raditi. Ne svidja mi se bas pristup sa ovim addressP, addressD... addressD je trenutno globalna i moze je svako mijenjati, nemamo bas dobru kotrolu nad njom.
+    // Moze se desiti da se obrisu sistemski folderi itd...
+    // Moracemo zajedno osmisliti i poraditi na tom mehanizmu (ako nista, pomocu nekih get funkcija... vidjecemo)
     DeleteFileA(addressP);
 }
 

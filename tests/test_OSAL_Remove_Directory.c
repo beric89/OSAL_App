@@ -27,6 +27,7 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: Bolje nazive za testove. Pogledati test OSAL_Create komentare
 void testOSAL_Remove_Directory_correct() {
     CU_ASSERT_TRUE(CreateDirectoryA(addressP, NULL));
     CU_ASSERT_EQUAL(OSAL_Remove_Directory(OSAL_Diretory_name, ""), OSAL_Test_PASS);

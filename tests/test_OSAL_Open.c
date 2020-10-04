@@ -15,6 +15,7 @@
  * CUnit Test Suite
  */
 
+// TODO: addressP preimenovati u filePath
 static char addressP[OSAL_address_max_length];
 
 int init_suite(void) {
@@ -28,6 +29,7 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: Dati deskriptivnije nazive testovima, umjesto 1, 2... Pogledati komentare u OSAL_Create testovima
 void testOSAL_Open_worse() {
     char* name = OSAL_File_name;
     char* access = "w";
@@ -49,7 +51,7 @@ void testOSAL_Open_worse2() {
     CU_ASSERT_PTR_NULL(result);
 }
 
-void testOSAL_Open_worse3() {
+void testOSAL_Open_access_rights_missing() {
     char* name = OSAL_File_name;
     char* access = "";
     int result = OSAL_Open(name, access);
@@ -64,8 +66,7 @@ void testOSAL_Open_correct() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
+        NULL);
     
     CloseHandle(File);
     
@@ -85,8 +86,7 @@ void testOSAL_Open_correct1() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
+        NULL);
     
     CloseHandle(File);
     
@@ -106,8 +106,7 @@ void testOSAL_Open_correct2() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
+        NULL);
     
     CloseHandle(File);
     

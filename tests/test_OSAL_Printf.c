@@ -23,6 +23,8 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: Ovdje bi bilo bolje provjeriti da li ce vracati OSAL_OK/OSAL_FAIL, kad prethodno pozovemo enable/disable OSAL_Printf
+// a u testOSAL_PrintfDisable/testOSAL_PrintfEnable na koju ce se vrijednost postaviti globalna promjenljiva 
 void testOSAL_Printf() {
     char name[] = OSAL_Printf_string;
     CU_ASSERT_EQUAL(OSAL_Printf(name), OSAL_Test_PASS);

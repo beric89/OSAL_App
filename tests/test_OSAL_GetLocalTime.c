@@ -16,7 +16,8 @@ int clean_suite(void) {
 }
 
 void testOSAL_GetLocalTime() {
-    int* result = OSAL_GetLocalTime();
+    // TODO: pogledati komentar u clock.c
+    int* localTime = OSAL_GetLocalTime();
     SYSTEMTIME t;
     GetLocalTime(&t);
     int pom[6];
@@ -27,9 +28,9 @@ void testOSAL_GetLocalTime() {
     pom[4] = t.wMinute;
     pom[5] = t.wSecond;
     pom[6] = t.wMilliseconds;
-    for (int i=0; i<7; i = i+1)
+    for (int i = 0; i < 7; i++)
     {
-        CU_ASSERT_EQUAL(pom[i], result[i]);
+        CU_ASSERT_EQUAL(pom[i], localTime[i]);
     }
 }
 
