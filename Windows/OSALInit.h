@@ -12,7 +12,7 @@
 #define OSAL_File_name_max_lenght 10
 #define OSAL_Read_position_correct 5
 #define OSAL_Read_position_worse 50
-#define OSAL_Read_text_correct "TEST TEST TEST TEST!"
+#define OSAL_READ_TEXT_CORRECT "TEST TEST TEST TEST!"
 #define OSAL_Write_text "Test test test test!"
 #define OSAL_Directory_exists 2
 
