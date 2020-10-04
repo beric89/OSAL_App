@@ -11,5 +11,5 @@ int OSAL_APIInit (void){
     en_dis = OSAL_APIInit_value_TRUE;
     strcpy(address, OSAL_APIInit_address);
     strcpy(addressD, OSAL_APIInit_address);
-    return OSAL_Test_PASS;
+    return OSAL_PASS;
 }
