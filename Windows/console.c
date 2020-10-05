@@ -5,31 +5,34 @@
 #include "console.h"
 #include "OSALInit.h"
 
-int OSAL_Printf (char *var)
+// TODO: koristiti deskriptivniju varijablu, umjesto var. npr textToPrint ili sl.
+int OSAL_Printf (char* var)
 {
-    char text[200] = "String is: "; //TODO: consider using STRING_LIMIT 200
-    strcat(text, var);
+    // TODO: umjesto jednostavnog 'String is: ', dodati barem 'OSAL: '.
+    // NOTE: Ako bude vremena, dodacemo __LINE__ i __FILE__ ispise
+    char consoleText[OSAL_PRINTF_TEXT_MAX_LENGTH] = "String is: ";
+    strcat(consoleText, var);
     
     if(en_dis == OSAL_APIInit_value_TRUE)
     {
-	if ( WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), text, strlen(text), NULL, NULL) == FALSE )
+	if ( WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), consoleText, strlen(consoleText), NULL, NULL) == FALSE )
 	{
 		if ( AllocConsole() == TRUE )
 		{
-			WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), text, strlen(text), NULL, NULL);
+			WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), consoleText, strlen(consoleText), NULL, NULL);
 
 			getch();
 
 			FreeConsole();
 		}
-	}
+	} // TODO: Cudno poravnanje za else uslov, popraviti. Takodje, else treba da ima '{' i '}', bez obzira koliko naredbi u njemu bilo
        else
                getch();
-	return OSAL_Test_PASS;
+	return OSAL_OK;
     }
     else
     {
-        return OSAL_Test_FAIL;
+        return OSAL_FAIL;
     }
 }
 

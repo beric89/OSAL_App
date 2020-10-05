@@ -33,7 +33,7 @@ void testOSAL_Open_Directory_correct() {
     CU_ASSERT_TRUE(RemoveDirectoryA(addressP));
 }
 
-void testOSAL_Open_Directory_worse() {
+void testOSAL_OpenDirectory_file_name_and_path_missing() {
     CU_ASSERT_EQUAL(OSAL_Open_Directory("", ""), OSAL_Test_FAIL);
 }
 

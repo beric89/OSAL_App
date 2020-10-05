@@ -28,11 +28,13 @@ int clean_suite(void) {
     return 0;
 }
 
+// testOSAL_Create_Directory_valid_file_name
 void testOSAL_Create_Directory_correct() {
     CU_ASSERT_EQUAL(OSAL_Create_Directory(OSAL_Diretory_name, ""), OSAL_Test_PASS);
     RemoveDirectoryA(addressP);
 }
 
+// testOSAL_Create_Directory_invalid_file_name
 void testOSAL_Create_Directory_worse() {
     CU_ASSERT_EQUAL(OSAL_Create_Directory("", ""), OSAL_Test_FAIL);
     RemoveDirectoryA(addressP);
@@ -51,7 +53,7 @@ void testOSAL_Create_Directory_path_exists() {
     strcat(addressP, "\\pp");
     CU_ASSERT_TRUE(CreateDirectoryA(addressP, NULL));
     CU_ASSERT_EQUAL(OSAL_Create_Directory(OSAL_Diretory_name, "TESTtest p"), OSAL_Test_FAIL);
-    system("cd C:\\Temp\\ && rmdir /Q /S TESTtest");
+    system("cd C:\\Temp\\ && rmdir /Q /S TESTtest"); // assert da li je prosao system poziv kako treba
 }
 
 void testOSAL_Create_Directory_path_not_exists() {

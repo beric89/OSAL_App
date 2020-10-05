@@ -28,6 +28,7 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: Bolje nazive za testove. Pogledati test OSAL_Create komentare
 void testOSAL_Remove_worse() {
     char* name = "aaaaaaaaaaaaa";
     CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_Test_FAIL);

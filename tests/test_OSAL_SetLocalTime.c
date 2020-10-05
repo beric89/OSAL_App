@@ -22,6 +22,7 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: pogledati komentar u clock.c
 void testOSAL_SetLocalTime() {
     static int date[6];
     date[0] = 2020;
@@ -45,7 +46,7 @@ void testOSAL_SetLocalTime() {
     pom[5] = t.wSecond;
     pom[6] = t.wMilliseconds;
     
-    for (int i=0; i<7; i = i+1)
+    for (int i = 0; i < 7; i++)
     {
         CU_ASSERT_EQUAL(date[i], pom[i]);
     }

@@ -15,6 +15,9 @@
  * CUnit Test Suite
  */
 
+// TODO: koristiti izraz 'path' umjesto 'address' da se izbjegne konfuzija sa memorijskim adresama.
+// Takodje treba desktriptivniji naziv, npr. 'static char filePath[OSAL_PATH_MAX_LENGTH]'
+// Isto i za ostale test fajlove vazi
 static char addressP[OSAL_address_max_length];
 
 int init_suite(void) {
@@ -29,6 +32,7 @@ int clean_suite(void) {
     return 0;
 }
 
+// TODO: Treba bolji naziv testa. Npr. 'testOSAL_Close_read_file'. Tako da ako padne, da znamo odmah koji je konkretan slucaj.
 void testOSAL_Close_correct() {
     HANDLE File = CreateFile(
         addressP,
@@ -37,11 +41,11 @@ void testOSAL_Close_correct() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
+        NULL);
     CU_ASSERT_EQUAL(OSAL_Close(File), OSAL_Test_PASS);
 }
 
+// TODO: Treba bolji naziv testa. Npr. 'testOSAL_Close_write_file'
 void testOSAL_Close_correct1() {
     HANDLE File = CreateFile(
         addressP,
@@ -50,11 +54,11 @@ void testOSAL_Close_correct1() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
+        NULL);
     CU_ASSERT_EQUAL(OSAL_Close(File), OSAL_Test_PASS);
 }
 
+// TODO: Treba bolji naziv testa. Npr. 'testOSAL_Close_read_or_write_file'
 void testOSAL_Close_correct2() {
     HANDLE File = CreateFile(
         addressP,
@@ -63,11 +67,11 @@ void testOSAL_Close_correct2() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
+        NULL);
     CU_ASSERT_EQUAL(OSAL_Close(File), OSAL_Test_PASS);
 }
 
+// TODO: Treba bolji naziv testa. 'testOSAL_Close_invalid_file_handle'
 void testOSAL_Close_worse() {
     HANDLE File;
     int result = OSAL_Close(File);

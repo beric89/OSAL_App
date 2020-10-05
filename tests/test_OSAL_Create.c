@@ -28,17 +28,22 @@ int clean_suite(void) {
     return 0;
 }
 
-void testName_validation_worseLong() {
-    char* name, *access;
+void testOSAL_Create_file_name_too_long() {
+    char* name
+    char* access;
+    // TODO: Kad se poveca OSAL_FILE_NAME_MAX_LENGTH u OSAL API init fajlu, povecati i duzinu ovog stringa
     name = "aaaaaaaaaaa";
     access = "r";
+    //TODO: result nije bas dobar naziv za povratnu vrijednost ove funkcije, jer ne vraca rezultat, vec file handle. Pa u skladu s tim, 'file' je prikladniji naziv
+    // Isto i za ostatak fajla
     HANDLE* result = OSAL_Create(name, access);
     CU_ASSERT_PTR_NULL(result);
     CloseHandle(result);
 }
 
-void testName_validation_worseShort() {
-    char* name, *access;
+void testOSAL_Create_file_name_too_short() {
+    char* name;
+    char* access;
     name = "";
     access = "r";
     HANDLE* result = OSAL_Create(name, access);
@@ -46,8 +51,9 @@ void testName_validation_worseShort() {
     CloseHandle(result);
 }
 
-void testAccess_validation_worse() {
-    char* access,* name;
+void testOSAL_Create_access_rights_missing() {
+    char* access;
+    char* name;
     access = "";
     name = OSAL_File_name;
     HANDLE* result = OSAL_Create(name, access);
@@ -55,8 +61,9 @@ void testAccess_validation_worse() {
     CloseHandle(result);
 }
 
-void testAccess_validation_worse1() {
-    char* access,* name;
+void testOSAL_Create_access_rights_incorrect() {
+    char* access;
+    char* name;
     access = "aa";
     name = OSAL_File_name;
     HANDLE* result = OSAL_Create(name, access);
@@ -64,17 +71,19 @@ void testAccess_validation_worse1() {
     CloseHandle(result);
 }
 
-void testAccess_validation_correct() {
-    char* access,* name;
+void testOSAL_Create_file_with_read_access_correct() {
+    char* access;
+    char* name;
     access = "r";
     name = OSAL_File_name;
+
     HANDLE* result = OSAL_Create(name,access);
     CU_ASSERT_PTR_NOT_NULL(result);
     CloseHandle(result);
     DeleteFileA(addressP);
 }
 
-void testAccess_validation_correct1() {
+void testOSAL_Create_file_with_write_access_correct() {
     char* access,* name;
     access = "w";
     name = OSAL_File_name;
@@ -84,8 +93,9 @@ void testAccess_validation_correct1() {
     DeleteFileA(addressP);
 }
 
-void testAccess_validation_correct2() {
-    char* access,* name;
+void testOSAL_Create_file_with_read_and_write_access_correct() {
+    char* access;
+    char* name;
     access = "r/w";
     name = OSAL_File_name;
     HANDLE* result = OSAL_Create(name,access);
@@ -94,51 +104,53 @@ void testAccess_validation_correct2() {
     DeleteFileA(addressP);
 }
 
-void testOSAL_Creat_correct() {
+// TODO: OVO ispod su isti kao ovi gore?
+
+// void testOSAL_Create_correct() {
+//     char* name = OSAL_File_name;
+//     char* access = "r";
+//     HANDLE* result = OSAL_Create(name, access);
+//     CU_ASSERT_PTR_NOT_NULL(result);
+//     CloseHandle(result);
+//     DeleteFileA(addressP);
+// }
+
+// void testOSAL_Creat_correct1() {
+//     char* name = OSAL_File_name;
+//     char* access = "w";
+//     HANDLE* result = OSAL_Create(name, access);
+//     CU_ASSERT_PTR_NOT_NULL(result);
+//     CloseHandle(result);
+//     DeleteFileA(addressP);
+// }
+
+// void testOSAL_Creat_correct2() {
+//     char* name = OSAL_File_name;
+//     char* access = "r/w";
+//     HANDLE* result = OSAL_Create(name, access);
+//     CU_ASSERT_PTR_NOT_NULL(result);
+//     CloseHandle(result);
+//     DeleteFileA(addressP);
+// }
+
+// void testOSAL_Creat_worse() {
+//     char* name = OSAL_File_name;
+//     char* access = "aa";
+//     HANDLE* result = OSAL_Create(name, access);
+//     CU_ASSERT_PTR_NULL(result);
+//     DeleteFileA(addressP);
+// }
+
+void testOSAL_Create_duplicate() {
     char* name = OSAL_File_name;
     char* access = "r";
     HANDLE* result = OSAL_Create(name, access);
     CU_ASSERT_PTR_NOT_NULL(result);
-    CloseHandle(result);
-    DeleteFileA(addressP);
-}
-
-void testOSAL_Creat_correct1() {
-    char* name = OSAL_File_name;
-    char* access = "w";
-    HANDLE* result = OSAL_Create(name, access);
-    CU_ASSERT_PTR_NOT_NULL(result);
-    CloseHandle(result);
-    DeleteFileA(addressP);
-}
-
-void testOSAL_Creat_correct2() {
-    char* name = OSAL_File_name;
-    char* access = "r/w";
-    HANDLE* result = OSAL_Create(name, access);
-    CU_ASSERT_PTR_NOT_NULL(result);
-    CloseHandle(result);
-    DeleteFileA(addressP);
-}
-
-void testOSAL_Creat_worse() {
-    char* name = OSAL_File_name;
-    char* access = "aa";
-    HANDLE* result = OSAL_Create(name, access);
-    CU_ASSERT_PTR_NULL(result);
-    DeleteFileA(addressP);
-}
-
-void testOSAL_Creat_duplicate() {
-    char* name = OSAL_File_name;
-    char* access = "r";
-    HANDLE* result = OSAL_Create(name, access);
     
     char* name1 = OSAL_File_name;
     char* access1 = "r";
     HANDLE* result1 = OSAL_Create(name1, access1);
     CU_ASSERT_PTR_NULL(result1);        
-    CU_ASSERT_PTR_NOT_NULL(result);
     CloseHandle(result);
     CloseHandle(result1);
     DeleteFileA(addressP);
