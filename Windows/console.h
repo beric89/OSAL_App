@@ -1,5 +1,12 @@
-// TODO: Pogresan sadrzaj headera?
-int* OSAL_GetLocalTime (void);
+#ifndef OSAL_CONSOLE_H 
+#define OSAL_CONSOLE_H
 
-void OSAL_SetLocalTime (int*);
+#include "OSALInit.h"
 
+OSAL_ReturnType OSAL_Printf (char*);
+
+void OSAL_PrintfDisable (void);
+
+void OSAL_PrintfEnable (void);
+
+#endif // OSAL_CONSOLE_H

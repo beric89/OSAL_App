@@ -5,21 +5,18 @@
  * Created on 23 Sep 2020, 14:22:54
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <CUnit/Basic.h>
-#include <windows.h>
-#include "../Windows\OSALInit.h"
+#include "../OSALTestHeader.h"
+
 /*
  * CUnit Test Suite
  */
 
-static char addressP[OSAL_address_max_length];
+static char filePath[OSAL_PATH_MAX_LENGHT];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(addressP, addressD);
-    strcat(addressP, OSAL_File_name);
+    strcpy(filePath, addressD);
+    strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -27,9 +24,9 @@ int clean_suite(void) {
     return 0;
 }
 
-void testOSAL_Write_worse() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Write_file_access_read() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_READ,
         FILE_SHARE_READ,
         NULL,
@@ -38,14 +35,14 @@ void testOSAL_Write_worse() {
         NULL
         );
 
-    CU_ASSERT_EQUAL(OSAL_Write(File, OSAL_Write_text), 0);
-    CloseHandle(File);
-    DeleteFileA(addressP);
+    CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_FAIL);
+    CloseHandle(file);
+    DeleteFileA(filePath);
 }
 
-void testOSAL_Write_worse1() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Write_empty_text_for_write() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_READ,
         FILE_SHARE_READ,
         NULL,
@@ -54,14 +51,14 @@ void testOSAL_Write_worse1() {
         NULL
         );
     
-    CU_ASSERT_EQUAL(OSAL_Write(File, ""), OSAL_Test_FAIL);
-    CloseHandle(File);
-    DeleteFileA(addressP);
+    CU_ASSERT_EQUAL(OSAL_Write(file, ""), OSAL_FAIL);
+    CloseHandle(file);
+    DeleteFileA(filePath);
 }
 
-void testOSAL_Write_correct() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Write_file_with_write_access() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_WRITE,
         FILE_SHARE_WRITE,
         NULL,
@@ -70,14 +67,14 @@ void testOSAL_Write_correct() {
         NULL
         );
     
-    CU_ASSERT_EQUAL(OSAL_Write(File, OSAL_Write_text), OSAL_Test_PASS);
-    CloseHandle(File);
-    DeleteFileA(addressP);
+    CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_OK);
+    CloseHandle(file);
+    DeleteFileA(filePath);
 }
 
-void testOSAL_Write_correct1() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Write_file_with_read_write_access() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
         NULL,
@@ -86,9 +83,9 @@ void testOSAL_Write_correct1() {
         NULL
         );
     
-    CU_ASSERT_EQUAL(OSAL_Write(File, OSAL_Write_text), OSAL_Test_PASS);
-    CloseHandle(File);
-    DeleteFileA(addressP);
+    CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_OK);
+    CloseHandle(file);
+    DeleteFileA(filePath);
 }
 
 int main() {
@@ -106,10 +103,10 @@ int main() {
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testOSAL_Write_worse", testOSAL_Write_worse))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Write_worse1", testOSAL_Write_worse1))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Write_correct", testOSAL_Write_correct))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Write_correct1", testOSAL_Write_correct))) {
+    if ((NULL == CU_add_test(pSuite, "testOSAL_Write_file_access_read", testOSAL_Write_file_access_read))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Write_empty_text_for_write", testOSAL_Write_empty_text_for_write))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Write_file_with_write_access", testOSAL_Write_file_with_write_access))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Write_file_with_write_access", testOSAL_Write_file_with_write_access))) {
         CU_cleanup_registry();
         return CU_get_error();
     }

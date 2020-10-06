@@ -5,22 +5,17 @@
  * Created on 22 Sep 2020, 09:34:01
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <CUnit/Basic.h>
-#include "../Windows\OSALInit.h"
-
+#include "../OSALTestHeader.h"
 /*
  * CUnit Test Suite
  */
 
-static char addressP[OSAL_address_max_length];
+static char filePath[OSAL_PATH_MAX_LENGHT];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(addressP, addressD);
-    strcat(addressP, OSAL_File_name);
+    strcpy(filePath, addressD);
+    strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -28,35 +23,33 @@ int clean_suite(void) {
     return 0;
 }
 
-// TODO: Trebaju bolji/deskriptivniji nazivi za testove (Izbjegavati numerisanje 1, 2, 3) 
-void testOSAL_File_Open_worse() {
+void testOSAL_Console_File_Open_invalid_file() {
     char* name = "test4.txt";
-    CU_ASSERT_EQUAL(OSAL_Console_File_Open(name), OSAL_Test_FAIL);
+    CU_ASSERT_EQUAL(OSAL_ConsoleFileOpen(name), OSAL_FAIL);
 }
 
-void testOSAL_File_Open_worse1() {
+void testOSAL_Console_File_Open_invalid_name_of_file() {
     char* name = "test44444444444";
-    CU_ASSERT_EQUAL(OSAL_Console_File_Open(name), OSAL_Test_FAIL);
+    CU_ASSERT_EQUAL(OSAL_ConsoleFileOpen(name), OSAL_FAIL);
 }
 
-void testOSAL_File_Open_worse2() {
+void testOSAL_Console_File_Open_empty_file_name() {
     char* name = "";
-    CU_ASSERT_EQUAL(OSAL_Console_File_Open(name), OSAL_Test_FAIL);
+    CU_ASSERT_EQUAL(OSAL_ConsoleFileOpen(name), OSAL_FAIL);
 }
 
-void testOSAL_File_Open_correct() {
-    char* name;
-    char* access;
-    name = OSAL_File_name;
-    access = "r";
-    HANDLE* result = OSAL_Create(name, access);
-    CloseHandle(result);
-    CU_ASSERT_EQUAL(OSAL_Console_File_Open(name), OSAL_Test_PASS);
-    // BITNO BITNO BITNO
-    // TODO: Ovo je generalno opasno raditi. Ne svidja mi se bas pristup sa ovim addressP, addressD... addressD je trenutno globalna i moze je svako mijenjati, nemamo bas dobru kotrolu nad njom.
-    // Moze se desiti da se obrisu sistemski folderi itd...
-    // Moracemo zajedno osmisliti i poraditi na tom mehanizmu (ako nista, pomocu nekih get funkcija... vidjecemo)
-    DeleteFileA(addressP);
+void testOSAL_Console_File_Open_read_file() {
+    HANDLE file = CreateFile(
+        filePath,
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        NULL,
+        CREATE_NEW,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL);
+    CloseHandle(file);
+    CU_ASSERT_EQUAL(OSAL_ConsoleFileOpen(OSAL_FILE_NAME), OSAL_OK);
+    DeleteFileA(filePath);
 }
 
 int main() {
@@ -74,10 +67,10 @@ int main() {
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testOSAL_File_Open_worse", testOSAL_File_Open_worse))||
-        (NULL == CU_add_test(pSuite, "testOSAL_File_Open_worse1", testOSAL_File_Open_worse1))||
-        (NULL == CU_add_test(pSuite, "testOSAL_File_Open_worse2", testOSAL_File_Open_worse2))||
-        (NULL == CU_add_test(pSuite, "testOSAL_File_Open_correct", testOSAL_File_Open_correct))) {
+    if ((NULL == CU_add_test(pSuite, "testOSAL_Console_File_Open_invalid_file", testOSAL_Console_File_Open_invalid_file))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Console_File_Open_invalid_name_of_file", testOSAL_Console_File_Open_invalid_name_of_file))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Console_File_Open_empty_file_name", testOSAL_Console_File_Open_empty_file_name))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Console_File_Open_read_file", testOSAL_Console_File_Open_read_file))) {
         CU_cleanup_registry();
         return CU_get_error();
     }

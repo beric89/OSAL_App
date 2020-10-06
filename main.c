@@ -26,8 +26,8 @@
 
 int main(void){
     OSAL_APIInit();
-    OSAL_Create_Directory("folder", "");
-    OSAL_Create_Directory("opet", "");
+    OSAL_CreateDirectory("folder", "");
+    OSAL_CreateDirectory("opet", "");
     HANDLE f = OSAL_Create("test.txt", "r/w");
     OSAL_Close(f);
     f = OSAL_Open("test.txt", "w");
@@ -38,15 +38,15 @@ int main(void){
     OSAL_Read(f, buffer, GetFileSize(f, NULL), 2);
     printf("%s\n", buffer);
     OSAL_Close(f);
-    OSAL_Create_Directory("brisi", "");
+    OSAL_CreateDirectory("brisi", "");
     f = OSAL_Create("test.txt", "r/w");
     OSAL_Close(f);
-    OSAL_Remove_Directory("brisi", "folder opet");
-    OSAL_Open_Directory("opet", "folder");
-    OSAL_Create_Directory("e", "");
+    OSAL_RemoveDirectory("brisi", "folder opet");
+    OSAL_OpenDirectory("opet", "folder");
+    OSAL_CreateDirectory("e", "");
     f = OSAL_Create("test.txt", "r/w");
     OSAL_Close(f);
-    OSAL_Create_Directory("oop", "");
+    OSAL_CreateDirectory("oop", "");
     return 0;
 }
 

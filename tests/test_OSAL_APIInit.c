@@ -5,11 +5,7 @@
  * Created on 24 Sep 2020, 14:16:26
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <CUnit/Basic.h>
-#include "../Windows\OSALInit.h"
+#include "../OSALTestHeader.h"
 
 /*
  * CUnit Test Suite
@@ -25,9 +21,9 @@ int clean_suite(void) {
 
 void testOSAL_APIInit() {
     OSAL_APIInit();
-    CU_ASSERT_EQUAL(en_dis, OSAL_Test_PASS);
-    CU_ASSERT_STRING_EQUAL(address, OSAL_APIInit_address);
-    CU_ASSERT_STRING_EQUAL(addressD, OSAL_APIInit_address);
+    CU_ASSERT_EQUAL(consoleEnabled, OSAL_OK);
+    CU_ASSERT_STRING_EQUAL(address, OSAL_APIINIT_ADDRESS);
+    CU_ASSERT_STRING_EQUAL(addressD, OSAL_APIINIT_ADDRESS);
 }
 
 int main() {

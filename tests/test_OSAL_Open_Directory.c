@@ -5,21 +5,17 @@
  * Created on 28 Sep 2020, 12:12:47
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <CUnit/Basic.h>
-#include <windows.h>
-#include "../Windows\OSALInit.h"
+#include "../OSALTestHeader.h"
 /*
  * CUnit Test Suite
  */
 
-static char addressP[OSAL_address_max_length];
+static char filePath[OSAL_PATH_MAX_LENGHT];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(addressP, addressD);
-    strcat(addressP, OSAL_Diretory_name);
+    strcpy(filePath, addressD);
+    strcat(filePath, OSAL_DIRECORY_NAME);
     return 0;
 }
 
@@ -28,21 +24,21 @@ int clean_suite(void) {
 }
 
 void testOSAL_Open_Directory_correct() {
-    CU_ASSERT_TRUE(CreateDirectoryA(addressP, NULL));
-    CU_ASSERT_EQUAL(OSAL_Open_Directory(OSAL_Diretory_name, ""), OSAL_Test_PASS);
-    CU_ASSERT_TRUE(RemoveDirectoryA(addressP));
+    CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
+    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECORY_NAME, ""), OSAL_OK);
+    CU_ASSERT_TRUE(RemoveDirectoryA(filePath));
 }
 
-void testOSAL_OpenDirectory_file_name_and_path_missing() {
-    CU_ASSERT_EQUAL(OSAL_Open_Directory("", ""), OSAL_Test_FAIL);
+void testOSAL_Open_Directory_file_name_and_path_missing() {
+    CU_ASSERT_EQUAL(OSAL_OpenDirectory("", ""), OSAL_FAIL);
 }
 
 void testOSAL_Open_Directory_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_Open_Directory(OSAL_Diretory_name, ""), OSAL_Test_FAIL);
+    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECORY_NAME, ""), OSAL_FAIL);
 }
 
 void testOSAL_Open_Directory_path_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_Open_Directory(OSAL_Diretory_name, "Test test"), OSAL_Test_FAIL);
+    CU_ASSERT_EQUAL(OSAL_OpenDirectory(OSAL_DIRECORY_NAME, "Test test"), OSAL_FAIL);
 }
 
 int main() {
@@ -61,7 +57,7 @@ int main() {
 
     /* Add the tests to the suite */
     if ((NULL == CU_add_test(pSuite, "testOSAL_Open_Directory_correct", testOSAL_Open_Directory_correct))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Open_Directory_worse", testOSAL_Open_Directory_worse))    ||
+        (NULL == CU_add_test(pSuite, "testOSAL_Open_Directory_file_name_and_path_missing", testOSAL_Open_Directory_file_name_and_path_missing))    ||
         (NULL == CU_add_test(pSuite, "testOSAL_Open_Directory_not_exists", testOSAL_Open_Directory_not_exists))||
         (NULL == CU_add_test(pSuite, "testOSAL_Open_Directory_path_not_exists", testOSAL_Open_Directory_path_not_exists))    ) {
         CU_cleanup_registry();

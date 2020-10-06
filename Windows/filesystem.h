@@ -1,22 +1,27 @@
+#ifndef OSAL_FILESYSTEM_H  
+#define OSAL_FILESYSTEM_H 
+
 #include <windows.h>
-// TODO: Primijetio sam da u console i clock, funkcije imaju nazive u camel case-u. Npr OSAL_GetLocalTime, dok su ovdje rijeci razdvojene sa '_'. Prepraviti u OSAL_ConsoleFileOpen, OSAL_CreateDirectory...
+#include "OSALInit.h"
+
 HANDLE* OSAL_Create(char* ,char* );
 
-int OSAL_ConsoleFileOpen(char* );
+OSAL_ReturnType OSAL_ConsoleFileOpen(char* );
 
-int OSAL_Remove(char* );
+OSAL_ReturnType OSAL_Remove(char* );
 
 HANDLE* OSAL_Open(char*, char* );
 
-int OSAL_Close(HANDLE* );
+OSAL_ReturnType OSAL_Close(HANDLE* );
 
-int OSAL_Write(HANDLE* ,char* );
+OSAL_ReturnType OSAL_Write(HANDLE* ,char* );
 
-int OSAL_Read(HANDLE* ,char*, int, int);
+OSAL_ReturnType OSAL_Read(HANDLE* ,char*, int, int);
 
-int OSAL_CreateDirectory(char *, char*);
+OSAL_ReturnType OSAL_CreateDirectory(char *, char*);
 
-int OSAL_RemoveDirectory(char *, char*);
+OSAL_ReturnType OSAL_RemoveDirectory(char *, char*);
 
-int OSAL_OpenDirectory(char*, char*);
+OSAL_ReturnType OSAL_OpenDirectory(char*, char*);
 
+#endif // OSAL_FILESYSTEM_H 

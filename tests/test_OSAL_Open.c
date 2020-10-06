@@ -5,23 +5,17 @@
  * Created on 22 Sep 2020, 16:01:06
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <CUnit/Basic.h>
-#include "../Windows\OSALInit.h"
-
+#include "../OSALTestHeader.h"
 /*
  * CUnit Test Suite
  */
 
-// TODO: addressP preimenovati u filePath
-static char addressP[OSAL_address_max_length];
+static char filePath[OSAL_PATH_MAX_LENGHT];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(addressP, addressD);
-    strcat(addressP, OSAL_File_name);
+    strcpy(filePath, addressD);
+    strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -29,38 +23,43 @@ int clean_suite(void) {
     return 0;
 }
 
-// TODO: Dati deskriptivnije nazive testovima, umjesto 1, 2... Pogledati komentare u OSAL_Create testovima
-void testOSAL_Open_worse() {
-    char* name = OSAL_File_name;
+void testOSAL_Open_file_not_exists() {
+    char* name = OSAL_FILE_NAME;
     char* access = "w";
-    int result = OSAL_Open(name, access);
-    CU_ASSERT_PTR_NULL(result);
+    int openResult = OSAL_Open(name, access);
+    CU_ASSERT_PTR_NULL(openResult);
 }
 
-void testOSAL_Open_worse1() {
-    char* name = "testaaaa.txt";
+void testOSAL_Open_file_name_too_long() {
+    char name[OSAL_FILE_NAME_MAX_LENGHT+1];
+    int i = 0;
+    while(OSAL_FILE_NAME_MAX_LENGHT+1>strlen(name))
+    {
+        name[i] = "a";
+        i++;
+    }
     char* access = "w";
-    int result = OSAL_Open(name, access);
-    CU_ASSERT_PTR_NULL(result);
+    int openResult = OSAL_Open(name, access);
+    CU_ASSERT_PTR_NULL(openResult);
 }
 
-void testOSAL_Open_worse2() {
+void testOSAL_Open_file_name_too_short() {
     char* name = "";
     char* access = "w";
-    int result = OSAL_Open(name, access);
-    CU_ASSERT_PTR_NULL(result);
+    int openResult = OSAL_Open(name, access);
+    CU_ASSERT_PTR_NULL(openResult);
 }
 
 void testOSAL_Open_access_rights_missing() {
-    char* name = OSAL_File_name;
+    char* name = OSAL_FILE_NAME;
     char* access = "";
-    int result = OSAL_Open(name, access);
-    CU_ASSERT_PTR_NULL(result);
+    int openResult = OSAL_Open(name, access);
+    CU_ASSERT_PTR_NULL(openResult);
 }
 
-void testOSAL_Open_correct() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Open_file_with_read_access_correct() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_READ,
         FILE_SHARE_READ,
         NULL,
@@ -68,19 +67,19 @@ void testOSAL_Open_correct() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
     
-    CloseHandle(File);
+    CloseHandle(file);
     
-    File = OSAL_Open(OSAL_File_name, "r");
-    CU_ASSERT_PTR_NOT_EQUAL(File, ERROR_FILE_NOT_FOUND);
-    CU_ASSERT_PTR_NOT_EQUAL(File, INVALID_HANDLE_VALUE);
-    CU_ASSERT_PTR_NOT_NULL(File);
-    CloseHandle(File);
-    DeleteFileA(addressP);
+    file = OSAL_Open(OSAL_FILE_NAME, "r");
+    CU_ASSERT_PTR_NOT_EQUAL(file, ERROR_FILE_NOT_FOUND);
+    CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
+    CU_ASSERT_PTR_NOT_NULL(file);
+    CloseHandle(file);
+    DeleteFileA(filePath);
 }
 
-void testOSAL_Open_correct1() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Open_file_with_write_access_correct() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_WRITE,
         FILE_SHARE_WRITE,
         NULL,
@@ -88,19 +87,19 @@ void testOSAL_Open_correct1() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
     
-    CloseHandle(File);
+    CloseHandle(file);
     
-    File = OSAL_Open(OSAL_File_name, "r");
-    CU_ASSERT_PTR_NOT_EQUAL(File, ERROR_FILE_NOT_FOUND);
-    CU_ASSERT_PTR_NOT_EQUAL(File, INVALID_HANDLE_VALUE);
-    CU_ASSERT_PTR_NOT_NULL(File);
-    CloseHandle(File);
-    DeleteFileA(addressP);
+    file = OSAL_Open(OSAL_FILE_NAME, "r");
+    CU_ASSERT_PTR_NOT_EQUAL(file, ERROR_FILE_NOT_FOUND);
+    CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
+    CU_ASSERT_PTR_NOT_NULL(file);
+    CloseHandle(file);
+    DeleteFileA(filePath);
 }
 
-void testOSAL_Open_correct2() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Open_file_with_read_and_write_access_correct() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
         NULL,
@@ -108,14 +107,14 @@ void testOSAL_Open_correct2() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
     
-    CloseHandle(File);
+    CloseHandle(file);
     
-    File = OSAL_Open(OSAL_File_name, "r");
-    CU_ASSERT_PTR_NOT_EQUAL(File, ERROR_FILE_NOT_FOUND);
-    CU_ASSERT_PTR_NOT_EQUAL(File, INVALID_HANDLE_VALUE);
-    CU_ASSERT_PTR_NOT_NULL(File);
-    CloseHandle(File);
-    DeleteFileA(addressP);
+    file = OSAL_Open(OSAL_FILE_NAME, "r");
+    CU_ASSERT_PTR_NOT_EQUAL(file, ERROR_FILE_NOT_FOUND);
+    CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
+    CU_ASSERT_PTR_NOT_NULL(file);
+    CloseHandle(file);
+    DeleteFileA(filePath);
 }
 
 int main() {
@@ -133,13 +132,13 @@ int main() {
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testOSAL_Open_worse", testOSAL_Open_worse))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Open_worse1", testOSAL_Open_worse1))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Open_worse2", testOSAL_Open_worse2))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Open_worse3", testOSAL_Open_worse3))||    
-        (NULL == CU_add_test(pSuite, "testOSAL_Open_correct", testOSAL_Open_correct))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Open_correct1", testOSAL_Open_correct1))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Open_correct2", testOSAL_Open_correct2))) {
+    if ((NULL == CU_add_test(pSuite, "testOSAL_Open_file_not_exists", testOSAL_Open_file_not_exists))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Open_file_name_too_long", testOSAL_Open_file_name_too_long))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Open_file_name_too_short", testOSAL_Open_file_name_too_short))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Open_access_rights_missing", testOSAL_Open_access_rights_missing))||    
+        (NULL == CU_add_test(pSuite, "testOSAL_Open_file_with_read_access_correct", testOSAL_Open_file_with_read_access_correct))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Open_file_with_write_access_correct", testOSAL_Open_file_with_write_access_correct))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Open_file_with_read_and_write_access_correct", testOSAL_Open_file_with_read_and_write_access_correct))) {
         CU_cleanup_registry();
         return CU_get_error();
     }

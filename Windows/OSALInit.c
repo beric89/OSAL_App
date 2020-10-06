@@ -7,11 +7,9 @@
 #include <stdio.h>
 #include <string.h>
 
-int OSAL_APIInit (void){
-    // pogledati OSALInit.h komentar za enum
-    en_dis = OSAL_CONSOLE_ENABLED;
-    strcpy(address, OSAL_APIInit_address);
-    strcpy(addressD, OSAL_APIInit_address);
-    // TODO: Koristiti nesto sto nece imati naziv test u sebi. Npr:
+OSAL_ReturnType OSAL_APIInit (void){
+    consoleEnabled = OSAL_CONSOLE_ENABLED;
+    strcpy(address, OSAL_APIINIT_ADDRESS);
+    strcpy(addressD, OSAL_APIINIT_ADDRESS);
     return OSAL_OK;
 }

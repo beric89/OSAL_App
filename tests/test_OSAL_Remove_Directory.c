@@ -5,21 +5,17 @@
  * Created on 28 Sep 2020, 08:56:41
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <CUnit/Basic.h>
-#include <windows.h>
-#include "../Windows\OSALInit.h"
+#include "../OSALTestHeader.h"
 /*
  * CUnit Test Suite
  */
 
-static char addressP[OSAL_address_max_length];
+static char filePath[OSAL_PATH_MAX_LENGHT];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(addressP, addressD);
-    strcat(addressP, OSAL_Diretory_name);
+    strcpy(filePath, addressD);
+    strcat(filePath, OSAL_DIRECORY_NAME);
     return 0;
 }
 
@@ -27,30 +23,29 @@ int clean_suite(void) {
     return 0;
 }
 
-// TODO: Bolje nazive za testove. Pogledati test OSAL_Create komentare
 void testOSAL_Remove_Directory_correct() {
-    CU_ASSERT_TRUE(CreateDirectoryA(addressP, NULL));
-    CU_ASSERT_EQUAL(OSAL_Remove_Directory(OSAL_Diretory_name, ""), OSAL_Test_PASS);
+    CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECORY_NAME, ""), OSAL_OK);
 }
 
 void testOSAL_Remove_Directory_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_Remove_Directory(OSAL_Diretory_name, ""), OSAL_Test_FAIL);
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECORY_NAME, ""), OSAL_FAIL);
 }
 
-void testOSAL_Remove_Directory_worse() {
-    CU_ASSERT_EQUAL(OSAL_Remove_Directory("", ""),OSAL_Test_FAIL);
+void testOSAL_Remove_Directory_name_too_short() {
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory("", ""),OSAL_FAIL);
 }
 
-void testOSAL_Remove_Directory_correct1() {
-    CU_ASSERT_TRUE(CreateDirectoryA(addressP, NULL));
-    strcat(addressP, "\\p");
-    CU_ASSERT_TRUE(CreateDirectoryA(addressP, NULL));
-    CU_ASSERT_EQUAL(OSAL_Remove_Directory("p", "TESTtest"), OSAL_Test_PASS);    
-    CU_ASSERT_EQUAL(OSAL_Remove_Directory(OSAL_Diretory_name, ""), OSAL_Test_PASS); 
+void testOSAL_Remove_Directory_multy_folders_correct() {
+    CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
+    strcat(filePath, "\\p");
+    CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory("p", "TESTtest"), OSAL_OK);    
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECORY_NAME, ""), OSAL_OK); 
 }
 
 void testOSAL_Remove_Directory_path_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_Remove_Directory("p", "TESTtest"), OSAL_Test_FAIL);    
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory("p", "TESTtest"), OSAL_FAIL);    
 }
 
 int main() {
@@ -70,8 +65,8 @@ int main() {
     /* Add the tests to the suite */
     if ((NULL == CU_add_test(pSuite, "testOSAL_Remove_Directory_correct", testOSAL_Remove_Directory_correct))||
         (NULL == CU_add_test(pSuite, "testOSAL_Remove_Directory_not_exists", testOSAL_Remove_Directory_not_exists))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_Directory_worse", testOSAL_Remove_Directory_worse)) ||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_Directory_correct1", testOSAL_Remove_Directory_correct1))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Remove_Directory_name_too_short", testOSAL_Remove_Directory_name_too_short)) ||
+        (NULL == CU_add_test(pSuite, "testOSAL_Remove_Directory_multy_folders_correct", testOSAL_Remove_Directory_multy_folders_correct))||
         (NULL == CU_add_test(pSuite, "testOSAL_Remove_Directory_path_not_exists", testOSAL_Remove_Directory_path_not_exists))) {
         CU_cleanup_registry();
         return CU_get_error();

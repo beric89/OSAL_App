@@ -5,10 +5,7 @@
  * Created on 14 Sep 2020, 13:39:21
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <CUnit/Basic.h>
-#include "../Windows\OSALInit.h"
+#include "../OSALTestHeader.h"
 
 /*
  * CUnit Test Suite
@@ -23,11 +20,9 @@ int clean_suite(void) {
     return 0;
 }
 
-// TODO: Ovdje bi bilo bolje provjeriti da li ce vracati OSAL_OK/OSAL_FAIL, kad prethodno pozovemo enable/disable OSAL_Printf
-// a u testOSAL_PrintfDisable/testOSAL_PrintfEnable na koju ce se vrijednost postaviti globalna promjenljiva 
 void testOSAL_Printf() {
-    char name[] = OSAL_Printf_string;
-    CU_ASSERT_EQUAL(OSAL_Printf(name), OSAL_Test_PASS);
+    char name[] = OSAL_PRINTF_STRING;
+    CU_ASSERT_EQUAL(OSAL_Printf(name), OSAL_OK);
 }
 
 int main() {

@@ -5,11 +5,7 @@
  * Created on 14 Sep 2020, 13:35:39
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <CUnit/Basic.h>
-#include "../Windows\OSALInit.h"
-
+#include "../OSALTestHeader.h"
 /*
  * CUnit Test Suite
  */
@@ -24,7 +20,7 @@ int clean_suite(void) {
 
 void testOSAL_PrintfEnable() {
     OSAL_PrintfEnable();
-    CU_ASSERT_EQUAL(OSAL_Printf(OSAL_Printf_string), OSAL_Test_PASS);
+    CU_ASSERT_EQUAL(consoleEnabled, OSAL_CONSOLE_ENABLED);
 }
 
 int main() {

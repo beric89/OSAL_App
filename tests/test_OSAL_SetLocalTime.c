@@ -5,11 +5,7 @@
  * Created on 15 Sep 2020, 11:32:22
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <CUnit/Basic.h>
-#include <windows.h>
-#include "../Windows\OSALInit.h"
+#include "../OSALTestHeader.h"
 /*
  * CUnit Test Suite
  */
@@ -22,34 +18,27 @@ int clean_suite(void) {
     return 0;
 }
 
-// TODO: pogledati komentar u clock.c
 void testOSAL_SetLocalTime() {
-    static int date[6];
-    date[0] = 2020;
-    date[1] = 9;
-    date[2] = 14;
-    date[3] = 13;
-    date[4] = 30;
-    date[5] = 29;
-    date[6] = 421;
+    OSAL_TimeType localTime;
+    localTime.year = 2020;
+    localTime.month = 9;
+    localTime.day = 14;
+    localTime.hour = 13;
+    localTime.minute = 30;
+    localTime.second = 29;
+    localTime.milliseconds = 421;
     
-    OSAL_SetLocalTime(date);
+    OSAL_SetLocalTime(localTime);
     
     SYSTEMTIME t;
     GetLocalTime(&t);
-    int pom[6];
-    pom[0] = t.wYear;
-    pom[1] = t.wMonth;
-    pom[2] = t.wDay;
-    pom[3] = t.wHour;
-    pom[4] = t.wMinute;
-    pom[5] = t.wSecond;
-    pom[6] = t.wMilliseconds;
-    
-    for (int i = 0; i < 7; i++)
-    {
-        CU_ASSERT_EQUAL(date[i], pom[i]);
-    }
+    CU_ASSERT_EQUAL(t.wYear, localTime.year);
+    CU_ASSERT_EQUAL(t.wMonth, localTime.month);
+    CU_ASSERT_EQUAL(t.wDay, localTime.day);
+    CU_ASSERT_EQUAL(t.wHour, localTime.hour);
+    CU_ASSERT_EQUAL(t.wMinute, localTime.minute);
+    CU_ASSERT_EQUAL(t.wSecond, localTime.second);
+    CU_ASSERT_EQUAL(t.wMilliseconds, localTime.milliseconds);
 }
 
 int main() {

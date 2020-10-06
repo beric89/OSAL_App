@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>OSAL.h</itemPath>
+      <itemPath>OSALTestHeader.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -146,6 +147,8 @@
       <compileType>
       </compileType>
       <item path="OSAL.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="OSALTestHeader.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Windows/OSALInit.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -350,6 +353,8 @@
         </asmTool>
       </compileType>
       <item path="OSAL.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="OSALTestHeader.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Windows/OSALInit.c" ex="false" tool="0" flavor2="0">
       </item>

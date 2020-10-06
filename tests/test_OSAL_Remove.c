@@ -5,22 +5,18 @@
  * Created on 22 Sep 2020, 10:53:11
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <CUnit/Basic.h>
-#include "../Windows\OSALInit.h"
+#include "../OSALTestHeader.h"
 
 /*
  * CUnit Test Suite
  */
 
-static char addressP[OSAL_address_max_length];
+static char filePath[OSAL_PATH_MAX_LENGHT];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(addressP, addressD);
-    strcat(addressP, OSAL_File_name);
+    strcpy(filePath, addressD);
+    strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -28,30 +24,30 @@ int clean_suite(void) {
     return 0;
 }
 
-// TODO: Bolje nazive za testove. Pogledati test OSAL_Create komentare
-void testOSAL_Remove_worse() {
-    char* name = "aaaaaaaaaaaaa";
-    CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_Test_FAIL);
+void testOSAL_Remove_file_name_too_long() {
+    char name[OSAL_FILE_NAME_MAX_LENGHT+1];
+    int i = 0;
+    while(OSAL_FILE_NAME_MAX_LENGHT+1>strlen(name))
+    {
+        name[i] = "a";
+        i++;
+    }
+    CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_FAIL);
 }
 
-void testOSAL_Remove_worse1() {
+void testOSAL_Remove_file_name_too_short() {
     char* name = "";
-    CU_ASSERT_EQUAL(OSAL_Remove(name),OSAL_Test_FAIL);
+    CU_ASSERT_EQUAL(OSAL_Remove(name),OSAL_FAIL);
 }
 
-void testOSAL_Remove_worse2() {
-    char* name = OSAL_File_name;
-    CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_Test_FAIL);
+void testOSAL_Remove_file_not_exists() {
+    char* name = OSAL_FILE_NAME;
+    CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_FAIL);
 }
 
-void testOSAL_Remove_worse3() {
-    char* name = OSAL_File_name;
-    CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_Test_FAIL);
-}
-
-void testOSAL_Remove_correct() {
-    HANDLE File = CreateFile(
-        addressP,
+void testOSAL_Remove_file_with_read_access_correct() {
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_READ,
         FILE_SHARE_READ,
         NULL,
@@ -59,14 +55,14 @@ void testOSAL_Remove_correct() {
         FILE_ATTRIBUTE_NORMAL,
         NULL
         );
-    CloseHandle(File);
-    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_File_name), OSAL_Test_PASS);
+    CloseHandle(file);
+    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_FILE_NAME), OSAL_OK);
 }
 
-void testOSAL_Remove_correct1() {
+void testOSAL_Remove_file_with_write_access_correct() {
     OSAL_APIInit();
-    HANDLE File = CreateFile(
-        addressP,
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_WRITE,
         FILE_SHARE_WRITE,
         NULL,
@@ -74,14 +70,14 @@ void testOSAL_Remove_correct1() {
         FILE_ATTRIBUTE_NORMAL,
         NULL
         );
-    CloseHandle(File);
-    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_File_name), OSAL_Test_PASS);
+    CloseHandle(file);
+    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_FILE_NAME), OSAL_OK);
 }
 
-void testOSAL_Remove_correct2() {
+void testOSAL_Remove_file_with_read_and_write_access_correct() {
     OSAL_APIInit();
-    HANDLE File = CreateFile(
-        addressP,
+    HANDLE file = CreateFile(
+        filePath,
         GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
         NULL,
@@ -89,8 +85,8 @@ void testOSAL_Remove_correct2() {
         FILE_ATTRIBUTE_NORMAL,
         NULL
         );
-    CloseHandle(File);
-    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_File_name), OSAL_Test_PASS);
+    CloseHandle(file);
+    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_FILE_NAME), OSAL_OK);
 }
 
 int main() {
@@ -108,13 +104,12 @@ int main() {
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testOSAL_Remove_worse", testOSAL_Remove_worse))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_worse1", testOSAL_Remove_worse1))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_worse2", testOSAL_Remove_worse2))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_worse3", testOSAL_Remove_worse3))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_correct", testOSAL_Remove_correct))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_correct1", testOSAL_Remove_correct1))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Remove_correct2", testOSAL_Remove_correct2))) {
+    if ((NULL == CU_add_test(pSuite, "testOSAL_Remove_file_name_too_long", testOSAL_Remove_file_name_too_long))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Remove_file_name_too_short", testOSAL_Remove_file_name_too_short))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Remove_file_not_exists", testOSAL_Remove_file_not_exists))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Remove_file_with_read_access_correct", testOSAL_Remove_file_with_read_access_correct))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Remove_file_with_write_access_correct", testOSAL_Remove_file_with_write_access_correct))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Remove_file_with_read_and_write_access_correct", testOSAL_Remove_file_with_read_and_write_access_correct))) {
         CU_cleanup_registry();
         return CU_get_error();
     }

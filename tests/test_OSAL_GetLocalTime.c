@@ -1,12 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <CUnit/Basic.h>
-#include <windows.h>
-#include "../Windows\OSALInit.h"
 /*
  * CUnit Test Suite
  */
 
+#include "../OSALTestHeader.h"
 int init_suite(void) {
     return 0;
 }
@@ -16,22 +12,16 @@ int clean_suite(void) {
 }
 
 void testOSAL_GetLocalTime() {
-    // TODO: pogledati komentar u clock.c
-    int* localTime = OSAL_GetLocalTime();
+    OSAL_TimeType localTime = OSAL_GetLocalTime();
     SYSTEMTIME t;
     GetLocalTime(&t);
-    int pom[6];
-    pom[0] = t.wYear;
-    pom[1] = t.wMonth;
-    pom[2] = t.wDay;
-    pom[3] = t.wHour;
-    pom[4] = t.wMinute;
-    pom[5] = t.wSecond;
-    pom[6] = t.wMilliseconds;
-    for (int i = 0; i < 7; i++)
-    {
-        CU_ASSERT_EQUAL(pom[i], localTime[i]);
-    }
+    CU_ASSERT_EQUAL(t.wYear, localTime.year);
+    CU_ASSERT_EQUAL(t.wMonth, localTime.month);
+    CU_ASSERT_EQUAL(t.wDay, localTime.day);
+    CU_ASSERT_EQUAL(t.wHour, localTime.hour);
+    CU_ASSERT_EQUAL(t.wMinute, localTime.minute);
+    CU_ASSERT_EQUAL(t.wSecond, localTime.second);
+    CU_ASSERT_EQUAL(t.wMilliseconds, localTime.milliseconds);
 }
 
 int main() {
