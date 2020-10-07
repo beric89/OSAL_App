@@ -11,7 +11,7 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGHT];
+static char filePath[OSAL_PATH_MAX_LENGTH];
 
 int init_suite(void) {
     OSAL_APIInit();

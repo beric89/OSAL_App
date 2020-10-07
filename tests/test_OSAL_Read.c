@@ -11,12 +11,12 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGHT];
+// static char filePath[OSAL_PATH_MAX_LENGTH];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(filePath, addressD);
-    strcat(filePath, OSAL_FILE_NAME);
+    // strcpy(filePath, addressD);
+    // strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -103,16 +103,16 @@ void testOSAL_Read_position_invalid() {
     char* bufferToBeRead = OSAL_READ_TEXT_CORRECT;
     int bufferSizeInBytes = strlen(bufferToBeRead) * sizeof(char);
     HANDLE file;
-    CU_ASSERT_EQUAL(OSAL_Read(file, bufferToBeRead, bufferSizeInBytes, OSAL_READ_POSITION_WORSE), OSAL_FAIL);   
+    CU_ASSERT_EQUAL(OSAL_Read(file, bufferToBeRead, bufferSizeInBytes, OSAL_READ_POSITION_WRONG), OSAL_FAIL);
 }
 
 void testOSAL_Read_invalid_file_handle() {
     char* bufferToBeRead = OSAL_READ_TEXT_CORRECT;
     int bufferSizeInBytes = strlen(bufferToBeRead) * sizeof(char);
-    CU_ASSERT_EQUAL(OSAL_Read(NULL, bufferToBeRead, bufferSizeInBytes, OSAL_READ_POSITION_WORSE), OSAL_FAIL);   
+    CU_ASSERT_EQUAL(OSAL_Read(NULL, bufferToBeRead, bufferSizeInBytes, OSAL_READ_POSITION_WRONG), OSAL_FAIL);
 }
 
-void testOSAL_Read_invalid_nummber_of_baytes() {
+void testOSAL_Read_invalid_number_of_bytes() {
     HANDLE file = CreateFile(
             filePath,
             GENERIC_WRITE,
@@ -151,7 +151,6 @@ void testOSAL_Read_invalid_nummber_of_baytes() {
     CloseHandle(file);
     DeleteFileA(filePath);
 }
-
 
 int main() {
     CU_pSuite pSuite = NULL;

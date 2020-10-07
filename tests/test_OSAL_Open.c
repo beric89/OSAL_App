@@ -10,7 +10,7 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGHT];
+static char filePath[OSAL_PATH_MAX_LENGTH];
 
 int init_suite(void) {
     OSAL_APIInit();
@@ -31,9 +31,9 @@ void testOSAL_Open_file_not_exists() {
 }
 
 void testOSAL_Open_file_name_too_long() {
-    char name[OSAL_FILE_NAME_MAX_LENGHT+1];
+    char name[OSAL_FILE_NAME_MAX_LENGHT + 1];
     int i = 0;
-    while(OSAL_FILE_NAME_MAX_LENGHT+1>strlen(name))
+    while(OSAL_FILE_NAME_MAX_LENGHT + 1>strlen(name))
     {
         name[i] = "a";
         i++;
