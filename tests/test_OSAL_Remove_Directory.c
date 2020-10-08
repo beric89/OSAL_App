@@ -20,7 +20,8 @@ int clean_suite(void) {
 }
 
 void testOSAL_Remove_Directory_correct() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\TESTtest";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "TESTtest");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     CU_ASSERT_EQUAL(OSAL_RemoveDirectory("", OSAL_DIRECTORY_NAME), OSAL_OK);
 }
@@ -34,16 +35,17 @@ void testOSAL_Remove_Directory_name_too_short() {
 }
 
 void testOSAL_Remove_Directory_multy_folders_correct() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\TESTtest";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "TESTtest");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     strcat(filePath, "\\p");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
-    CU_ASSERT_EQUAL(OSAL_RemoveDirectory("TESTtest", "p"), OSAL_OK);    
-    CU_ASSERT_EQUAL(OSAL_RemoveDirectory("", OSAL_DIRECTORY_NAME), OSAL_OK); 
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory("TESTtest", "p"), OSAL_OK);
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory("", OSAL_DIRECTORY_NAME), OSAL_OK);
 }
 
 void testOSAL_Remove_Directory_path_not_exists() {
-    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECTORY_NAME, ""), OSAL_FAIL);    
+    CU_ASSERT_EQUAL(OSAL_RemoveDirectory(OSAL_DIRECTORY_NAME, ""), OSAL_FAIL);
 }
 
 int main() {

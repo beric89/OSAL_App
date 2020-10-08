@@ -3,7 +3,7 @@
 #include <string.h>
 
 static OSAL_ReturnType nameValidation(char *name){
-    if(strlen(name) == OSAL_FILE_NAME_MIN_LENGHT || strlen(name) > OSAL_FILE_NAME_MAX_LENGHT)
+    if(strlen(name) == OSAL_FILE_NAME_MIN_LENGTH || strlen(name) > OSAL_FILE_NAME_MAX_LENGTH)
     {
         return OSAL_FAIL;
     }
@@ -114,10 +114,9 @@ static int checkIfFileExists(char* filePath, char* name){
     strcat(filePathExists, " EXIT 2");
     if(system(filePathExists) == 2)
     {
-        
         return OSAL_TRUE;
     }
-    else 
+    else
     {
         return OSAL_FALSE;
     }
@@ -156,7 +155,7 @@ HANDLE* OSAL_Create(char* filePath, char* name, char* access){
 }
 
 OSAL_ReturnType OSAL_ConsoleFileOpen(char* filePath, char* name){
-    char* fileConvertPath = convertPath(filePath);  
+    char* fileConvertPath = convertPath(filePath);
     if (nameValidation(name) != OSAL_OK)
     {
         return OSAL_FAIL;
@@ -210,7 +209,7 @@ OSAL_ReturnType OSAL_Remove(char* filePath, char* name){
     }
 }
 
-HANDLE* OSAL_Open(char* filePath,char* name, char* access)
+HANDLE* OSAL_Open(char* filePath, char* name, char* access)
 {
     if (nameValidation(name) != OSAL_OK)
     {
@@ -220,7 +219,6 @@ HANDLE* OSAL_Open(char* filePath,char* name, char* access)
     {
         return NULL;
     }
-    
     char* fileConvertPath;
     fileConvertPath = convertPath(filePath);
     fileConvertPath = makePath(fileConvertPath, name);

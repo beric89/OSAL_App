@@ -21,7 +21,8 @@ int clean_suite(void) {
 }
 
 void testOSAL_Close_read_file() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ,
@@ -35,7 +36,8 @@ void testOSAL_Close_read_file() {
 }
 
 void testOSAL_Close_write_file() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,
         GENERIC_WRITE,
@@ -49,7 +51,8 @@ void testOSAL_Close_write_file() {
 }
 
 void testOSAL_Close_read_or_write_file() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ | GENERIC_WRITE,

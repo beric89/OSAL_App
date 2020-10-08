@@ -21,7 +21,8 @@ int clean_suite(void) {
 }
 
 void testOSAL_Read_file_correct() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
             filePath,
             GENERIC_WRITE,
@@ -30,18 +31,18 @@ void testOSAL_Read_file_correct() {
             CREATE_NEW,
             FILE_ATTRIBUTE_NORMAL,
             NULL);
-    
+
     CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
-    
+
     char* bufferToBeRead = OSAL_READ_TEXT_CORRECT;
     DWORD  dwBaytesWritten;
-    
+
     int bufferSizeInBytes = strlen(bufferToBeRead)*sizeof(char);
-    
+
     WriteFile(file, bufferToBeRead, bufferSizeInBytes, &dwBaytesWritten, NULL);
-    
+
     CloseHandle(file);
-    
+
     file = CreateFile(
             filePath,
             GENERIC_READ,
@@ -50,13 +51,13 @@ void testOSAL_Read_file_correct() {
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
             NULL);
-    
+
     CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
 
     char bufferRead[bufferSizeInBytes];
-    
+
     OSAL_Read(file, bufferRead, bufferSizeInBytes, OSAL_READ_POSITION_CORRECT);
-    
+
     char bufferToBeReadWithPositionForRead[bufferSizeInBytes-OSAL_READ_POSITION_CORRECT];
     for(int pom = 0; pom<(bufferSizeInBytes-OSAL_READ_POSITION_CORRECT); pom = pom+1 )
     {
@@ -64,13 +65,14 @@ void testOSAL_Read_file_correct() {
     }
     bufferToBeReadWithPositionForRead[bufferSizeInBytes-OSAL_READ_POSITION_CORRECT]='\0';
     CU_ASSERT_STRING_EQUAL(bufferRead, bufferToBeReadWithPositionForRead);
-  
+
     CloseHandle(file);
     DeleteFileA(filePath);
 }
 
 void testOSAL_Read_not_exists_file() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
             filePath,
             GENERIC_READ,
@@ -82,17 +84,17 @@ void testOSAL_Read_not_exists_file() {
     char* bufferToBeRead = "test";
     int bufferSizeInBytes = strlen(bufferToBeRead) * sizeof(char);
     char bufferRead[bufferSizeInBytes];
-    
+
     OSAL_Read(file, bufferRead, bufferSizeInBytes, 1);
-    
+
     char bufferToBeReadWithPositionForRead[bufferSizeInBytes - 1];
     for(int i = 0; i < (bufferSizeInBytes - 1); i++)
     {
         bufferToBeReadWithPositionForRead[i] = bufferToBeRead[i + 1];
     }
-    
+
     CU_ASSERT_STRING_NOT_EQUAL(bufferRead, bufferToBeRead);
-   
+
     CloseHandle(file);
     DeleteFileA(filePath);
 }
@@ -111,7 +113,8 @@ void testOSAL_Read_invalid_file_handle() {
 }
 
 void testOSAL_Read_invalid_number_of_bytes() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
             filePath,
             GENERIC_WRITE,
@@ -120,18 +123,18 @@ void testOSAL_Read_invalid_number_of_bytes() {
             CREATE_NEW,
             FILE_ATTRIBUTE_NORMAL,
             NULL);
-    
+
     CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
-    
+
     char* bufferToBeRead = OSAL_READ_TEXT_CORRECT;
     DWORD  dwBytesWritten;
-    
+
     int bufferSizeInBytes = strlen(bufferToBeRead) * sizeof(char);
-    
+
     WriteFile(file, bufferToBeRead, bufferSizeInBytes, &dwBytesWritten, NULL);
-    
+
     CloseHandle(file);
-    
+
     file = CreateFile(
             filePath,
             GENERIC_READ,
@@ -140,13 +143,13 @@ void testOSAL_Read_invalid_number_of_bytes() {
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
             NULL);
-    
+
     CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
 
     char bufferRead[bufferSizeInBytes];
-    
+
     CU_ASSERT_EQUAL(OSAL_Read(file, bufferRead, bufferSizeInBytes+1, OSAL_READ_POSITION_CORRECT), OSAL_FAIL);
-   
+
     CloseHandle(file);
     DeleteFileA(filePath);
 }
