@@ -12,7 +12,6 @@
  */
 
 int init_suite(void) {
-    OSAL_APIInit();
     return 0;
 }
 
@@ -20,11 +19,16 @@ int clean_suite(void) {
     return 0;
 }
 
-// TODO: Ovdje bi bilo bolje provjeriti da li ce vracati OSAL_OK/OSAL_FAIL, kad prethodno pozovemo enable/disable OSAL_Printf
-// a u testOSAL_PrintfDisable/testOSAL_PrintfEnable na koju ce se vrijednost postaviti globalna promjenljiva 
-void testOSAL_Printf() {
+void testOSAL_Printf_enable() {
+    OSAL_PrintfEnable();
     char name[] = OSAL_PRINTF_STRING;
     CU_ASSERT_EQUAL(OSAL_Printf(name), OSAL_OK);
+}
+
+void testOSAL_Printf_disable() {
+    OSAL_PrintfDisable();
+    char name[] = OSAL_PRINTF_STRING;
+    CU_ASSERT_EQUAL(OSAL_Printf(name), OSAL_FAIL);
 }
 
 int main() {
@@ -42,7 +46,8 @@ int main() {
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testOSAL_Printf", testOSAL_Printf))) {
+    if ((NULL == CU_add_test(pSuite, "testOSAL_Printf_enable", testOSAL_Printf_enable))||
+        (NULL == CU_add_test(pSuite, "testOSAL_Printf_disable", testOSAL_Printf_disable))    ) {
         CU_cleanup_registry();
         return CU_get_error();
     }

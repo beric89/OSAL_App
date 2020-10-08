@@ -11,12 +11,9 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGTH];
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(filePath, addressD);
-    strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -25,6 +22,7 @@ int clean_suite(void) {
 }
 
 void testOSAL_Remove_file_name_too_long() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "";
     char name[OSAL_FILE_NAME_MAX_LENGHT+1];
     int i = 0;
     while(OSAL_FILE_NAME_MAX_LENGHT+1>strlen(name))
@@ -32,20 +30,23 @@ void testOSAL_Remove_file_name_too_long() {
         name[i] = "a";
         i++;
     }
-    CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_FAIL);
+    CU_ASSERT_EQUAL(OSAL_Remove(filePath, name), OSAL_FAIL);
 }
 
 void testOSAL_Remove_file_name_too_short() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "";
     char* name = "";
-    CU_ASSERT_EQUAL(OSAL_Remove(name),OSAL_FAIL);
+    CU_ASSERT_EQUAL(OSAL_Remove(filePath,name),OSAL_FAIL);
 }
 
 void testOSAL_Remove_file_not_exists() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "";
     char* name = OSAL_FILE_NAME;
-    CU_ASSERT_EQUAL(OSAL_Remove(name), OSAL_FAIL);
+    CU_ASSERT_EQUAL(OSAL_Remove(filePath,name), OSAL_FAIL);
 }
 
 void testOSAL_Remove_file_with_read_access_correct() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ,
@@ -56,10 +57,11 @@ void testOSAL_Remove_file_with_read_access_correct() {
         NULL
         );
     CloseHandle(file);
-    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_FILE_NAME), OSAL_OK);
+    CU_ASSERT_EQUAL(OSAL_Remove("",OSAL_FILE_NAME), OSAL_OK);
 }
 
 void testOSAL_Remove_file_with_write_access_correct() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     OSAL_APIInit();
     HANDLE file = CreateFile(
         filePath,
@@ -71,10 +73,11 @@ void testOSAL_Remove_file_with_write_access_correct() {
         NULL
         );
     CloseHandle(file);
-    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_FILE_NAME), OSAL_OK);
+    CU_ASSERT_EQUAL(OSAL_Remove("",OSAL_FILE_NAME), OSAL_OK);
 }
 
 void testOSAL_Remove_file_with_read_and_write_access_correct() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     OSAL_APIInit();
     HANDLE file = CreateFile(
         filePath,
@@ -86,7 +89,7 @@ void testOSAL_Remove_file_with_read_and_write_access_correct() {
         NULL
         );
     CloseHandle(file);
-    CU_ASSERT_EQUAL(OSAL_Remove(OSAL_FILE_NAME), OSAL_OK);
+    CU_ASSERT_EQUAL(OSAL_Remove("",OSAL_FILE_NAME), OSAL_OK);
 }
 
 int main() {

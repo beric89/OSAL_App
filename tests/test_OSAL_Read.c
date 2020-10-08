@@ -11,12 +11,8 @@
  * CUnit Test Suite
  */
 
-// static char filePath[OSAL_PATH_MAX_LENGTH];
-
 int init_suite(void) {
     OSAL_APIInit();
-    // strcpy(filePath, addressD);
-    // strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -25,6 +21,7 @@ int clean_suite(void) {
 }
 
 void testOSAL_Read_file_correct() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
             filePath,
             GENERIC_WRITE,
@@ -73,6 +70,7 @@ void testOSAL_Read_file_correct() {
 }
 
 void testOSAL_Read_not_exists_file() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
             filePath,
             GENERIC_READ,
@@ -113,6 +111,7 @@ void testOSAL_Read_invalid_file_handle() {
 }
 
 void testOSAL_Read_invalid_number_of_bytes() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
             filePath,
             GENERIC_WRITE,
@@ -171,7 +170,7 @@ int main() {
         (NULL == CU_add_test(pSuite, "testOSAL_Read_not_exists_file", testOSAL_Read_not_exists_file))||
         (NULL == CU_add_test(pSuite, "testOSAL_Read_position_invalid", testOSAL_Read_position_invalid))||
         (NULL == CU_add_test(pSuite, "testOSAL_Read_invalid_file_handle", testOSAL_Read_invalid_file_handle))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Read_invalid_nummber_of_baytes", testOSAL_Read_invalid_nummber_of_baytes))    ) {
+        (NULL == CU_add_test(pSuite, "testOSAL_Read_invalid_number_of_bytes", testOSAL_Read_invalid_number_of_bytes))    ) {
         CU_cleanup_registry();
         return CU_get_error();
     }

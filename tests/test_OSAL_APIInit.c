@@ -22,8 +22,6 @@ int clean_suite(void) {
 void testOSAL_APIInit() {
     OSAL_APIInit();
     CU_ASSERT_EQUAL(consoleEnabled, OSAL_OK);
-    CU_ASSERT_STRING_EQUAL(address, OSAL_APIINIT_ADDRESS);
-    CU_ASSERT_STRING_EQUAL(addressD, OSAL_APIINIT_ADDRESS);
 }
 
 int main() {

@@ -11,12 +11,10 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGTH];
+
 
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(filePath, addressD);
-    strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
@@ -25,6 +23,7 @@ int clean_suite(void) {
 }
 
 void testOSAL_Write_file_access_read() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ,
@@ -41,6 +40,7 @@ void testOSAL_Write_file_access_read() {
 }
 
 void testOSAL_Write_empty_text_for_write() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ,
@@ -57,6 +57,7 @@ void testOSAL_Write_empty_text_for_write() {
 }
 
 void testOSAL_Write_file_with_write_access() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_WRITE,
@@ -73,6 +74,7 @@ void testOSAL_Write_file_with_write_access() {
 }
 
 void testOSAL_Write_file_with_read_write_access() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ | GENERIC_WRITE,

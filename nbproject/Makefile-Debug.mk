@@ -53,7 +53,6 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f7 \
-	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f9 \
 	${TESTDIR}/TestFiles/f10 \
 	${TESTDIR}/TestFiles/f11 \
@@ -72,7 +71,6 @@ TESTOBJECTFILES= \
 	${TESTDIR}/tests/test_OSAL_Create_Directory.o \
 	${TESTDIR}/tests/test_OSAL_GetLocalTime.o \
 	${TESTDIR}/tests/test_OSAL_Open.o \
-	${TESTDIR}/tests/test_OSAL_Open_Directory.o \
 	${TESTDIR}/tests/test_OSAL_Printf.o \
 	${TESTDIR}/tests/test_OSAL_PrintfDIsable.o \
 	${TESTDIR}/tests/test_OSAL_PrintfEnable.o \
@@ -166,10 +164,6 @@ ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/test_OSAL_Open.o ${OBJECTFILES:%.o=%_n
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c} -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS}   -lcunit 
 
-${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/test_OSAL_Open_Directory.o ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.c} -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS}   -lcunit 
-
 ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/test_OSAL_Printf.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c} -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS}   -lcunit 
@@ -243,12 +237,6 @@ ${TESTDIR}/tests/test_OSAL_Open.o: tests/test_OSAL_Open.c
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/test_OSAL_Open.o tests/test_OSAL_Open.c
-
-
-${TESTDIR}/tests/test_OSAL_Open_Directory.o: tests/test_OSAL_Open_Directory.c 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/test_OSAL_Open_Directory.o tests/test_OSAL_Open_Directory.c
 
 
 ${TESTDIR}/tests/test_OSAL_Printf.o: tests/test_OSAL_Printf.c 
@@ -375,7 +363,6 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
-	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f9 || true; \
 	    ${TESTDIR}/TestFiles/f10 || true; \
 	    ${TESTDIR}/TestFiles/f11 || true; \

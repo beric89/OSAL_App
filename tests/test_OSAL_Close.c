@@ -11,21 +11,17 @@
  * CUnit Test Suite
  */
 
-static char filePath[OSAL_PATH_MAX_LENGTH];
-
 int init_suite(void) {
     OSAL_APIInit();
-    strcpy(filePath, addressD);
-    strcat(filePath, OSAL_FILE_NAME);
     return 0;
 }
 
 int clean_suite(void) {
-    DeleteFileA(filePath);
     return 0;
 }
 
 void testOSAL_Close_read_file() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ,
@@ -35,9 +31,11 @@ void testOSAL_Close_read_file() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
     CU_ASSERT_EQUAL(OSAL_Close(file), OSAL_OK);
+    DeleteFileA(filePath);
 }
 
 void testOSAL_Close_write_file() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_WRITE,
@@ -47,9 +45,11 @@ void testOSAL_Close_write_file() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
     CU_ASSERT_EQUAL(OSAL_Close(file), OSAL_OK);
+    DeleteFileA(filePath);
 }
 
 void testOSAL_Close_read_or_write_file() {
+    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ | GENERIC_WRITE,
@@ -59,6 +59,7 @@ void testOSAL_Close_read_or_write_file() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
     CU_ASSERT_EQUAL(OSAL_Close(file), OSAL_OK);
+    DeleteFileA(filePath);
 }
 
 void testOSAL_Close_invalid_file_handle() {

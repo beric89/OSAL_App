@@ -9,7 +9,5 @@
 
 OSAL_ReturnType OSAL_APIInit (void){
     consoleEnabled = OSAL_CONSOLE_ENABLED;
-    strcpy(address, OSAL_APIINIT_ADDRESS);
-    strcpy(addressD, OSAL_APIINIT_ADDRESS);
     return OSAL_OK;
 }

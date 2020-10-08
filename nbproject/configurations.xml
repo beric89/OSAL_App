@@ -74,12 +74,6 @@
                      kind="TEST">
         <itemPath>tests/test_OSAL_Open.c</itemPath>
       </logicalFolder>
-      <logicalFolder name="f8"
-                     displayName="Test OSAL Open Directiry"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/test_OSAL_Open_Directory.c</itemPath>
-      </logicalFolder>
       <logicalFolder name="f9"
                      displayName="Test OSAL Printf"
                      projectFiles="true"
@@ -278,14 +272,6 @@
           </linkerLibItems>
         </linkerTool>
       </folder>
-      <folder path="TestFiles/f8">
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f8</output>
-          <linkerLibItems>
-            <linkerOptionItem>-lcunit</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
       <folder path="TestFiles/f9">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f9</output>
@@ -312,8 +298,6 @@
       <item path="tests/test_OSAL_GetLocalTime.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/test_OSAL_Open.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="tests/test_OSAL_Open_Directory.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/test_OSAL_Printf.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -484,14 +468,6 @@
           </linkerLibItems>
         </linkerTool>
       </folder>
-      <folder path="TestFiles/f8">
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f8</output>
-          <linkerLibItems>
-            <linkerOptionItem>-lcunit</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
       <folder path="TestFiles/f9">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f9</output>
@@ -518,8 +494,6 @@
       <item path="tests/test_OSAL_GetLocalTime.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/test_OSAL_Open.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="tests/test_OSAL_Open_Directory.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/test_OSAL_Printf.c" ex="false" tool="0" flavor2="0">
       </item>

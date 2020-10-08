@@ -26,27 +26,54 @@
 
 int main(void){
     OSAL_APIInit();
-    OSAL_CreateDirectory("folder", "");
-    OSAL_CreateDirectory("opet", "");
-    HANDLE f = OSAL_Create("test.txt", "r/w");
+    // primjer kreiranje fodlera "folder" u C:\Temp
+    OSAL_CreateDirectory("", "folder");
+    
+    // primjer kreiranje fodlera "opet" u C:\Temp\folder
+    OSAL_CreateDirectory("folder", "opet");
+    
+    // primjer kreiranje fajla "test.txt" u C:\Temp\folder\opet
+    HANDLE f = OSAL_Create("folder opet","test.txt", "r/w");
+    
+    // primjer zatvaranja fajla "test.txt" u C:\Temp\folder\opet
     OSAL_Close(f);
-    f = OSAL_Open("test.txt", "w");
+    
+    // primjer otvaranja fajla "test.txt" u C:\Temp\folder\opet
+    f = OSAL_Open("folder opet", "test.txt", "w");
+    
+    // primjer upisa i zatvaranja fajla "test.txt" u C:\Temp\folder\opet
     OSAL_Write(f, "test test test!");
     OSAL_Close(f);
-    f = OSAL_Open("test.txt", "r");
+    
+    // primjer otvaranja, citanja i zatvaranja fajla "test.txt" u C:\Temp\folder\opet
+    f = OSAL_Open("folder opet",  "test.txt", "r");
     char buffer[15];
     OSAL_Read(f, buffer, GetFileSize(f, NULL), 2);
     printf("%s\n", buffer);
     OSAL_Close(f);
-    OSAL_CreateDirectory("brisi", "");
-    f = OSAL_Create("test.txt", "r/w");
+    
+    // primjer kreiranje foldera "brisi" u C:\Temp\folder\opet
+    OSAL_CreateDirectory("folder opet" ,"brisi");
+    
+    // primjer kreiranje i zatvaranja fajla "test.txt" u C:\Temp\folder\opet\brisi
+    f = OSAL_Create("folder opet brisi", "test.txt", "r/w");
     OSAL_Close(f);
-    OSAL_RemoveDirectory("brisi", "folder opet");
-    OSAL_OpenDirectory("opet", "folder");
-    OSAL_CreateDirectory("e", "");
-    f = OSAL_Create("test.txt", "r/w");
+    
+    // primjer brisanja foldera "brisi" u C:\Temp\folder\opet\brisi
+    OSAL_RemoveDirectory("folder opet", "brisi");
+    
+    // primjer kreiranja foldera "e" u C:\Temp\folder\opet
+    OSAL_CreateDirectory("folder opet", "e");
+    
+    // primjer kreiranja i zatvaranja fajla "test.txt" u C:\Temp\folder\opet\e
+    f = OSAL_Create("folder opet e","test.txt", "r/w");
     OSAL_Close(f);
-    OSAL_CreateDirectory("oop", "");
+    
+    // primjer kreiranja foldera "oop" u C:\Temp\folder\opet\e
+    OSAL_CreateDirectory("folder opet e", "oop");
+    
+    // primjer otvaranja fajla "test.txt" u konzoli iz C:\Temp\folder\opet\e
+    OSAL_ConsoleFileOpen("folder opet e", "test.txt");
     return 0;
 }
 
