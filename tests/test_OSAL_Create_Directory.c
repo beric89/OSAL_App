@@ -20,7 +20,8 @@ int clean_suite(void) {
 }
 
 void testOSAL_Create_Directory_valid_name() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\TESTtest";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "TESTtest");
     CU_ASSERT_EQUAL(OSAL_CreateDirectory("", "TESTtest"), OSAL_OK);
     RemoveDirectoryA(filePath);
 }
@@ -30,9 +31,9 @@ void testOSAL_Create_Directory_invalid_name() {
 }
 
 void testOSAL_Create_Directory_name_too_long() {
-    char name[OSAL_FILE_NAME_MAX_LENGHT+1];
+    char name[OSAL_FILE_NAME_MAX_LENGTH + 1];
     int i = 0;
-    while(OSAL_FILE_NAME_MAX_LENGHT+1>strlen(name))
+    while(OSAL_FILE_NAME_MAX_LENGTH + 1 > strlen(name))
     {
         name[i] = "a";
         i++;
@@ -41,14 +42,16 @@ void testOSAL_Create_Directory_name_too_long() {
 }
 
 void testOSAL_Create_Directory_exists() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\TESTtest";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "TESTtest");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     CU_ASSERT_EQUAL(OSAL_CreateDirectory("", "TESTtest"), OSAL_FAIL);
     RemoveDirectoryA(filePath);
 }
 
 void testOSAL_Create_Directory_path_exists() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\TESTtest";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "TESTtest");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     strcat(filePath, "\\p");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
@@ -82,7 +85,7 @@ int main() {
         (NULL == CU_add_test(pSuite, "testOSAL_Create_Directory_exists", testOSAL_Create_Directory_exists))||
         (NULL == CU_add_test(pSuite, "testOSAL_Create_Directory_name_too_long", testOSAL_Create_Directory_name_too_long))    ||
         (NULL == CU_add_test(pSuite, "testOSAL_Create_Directory_path_exists", testOSAL_Create_Directory_path_exists))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Create_Directory_path_not_exists", testOSAL_Create_Directory_path_not_exists))) 
+        (NULL == CU_add_test(pSuite, "testOSAL_Create_Directory_path_not_exists", testOSAL_Create_Directory_path_not_exists)))
     {
         CU_cleanup_registry();
         return CU_get_error();

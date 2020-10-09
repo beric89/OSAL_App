@@ -28,8 +28,9 @@ int main() {
     CU_pSuite pSuite = NULL;
 
     /* Initialize the CUnit test registry */
-    if (CUE_SUCCESS != CU_initialize_registry())
+    if (CUE_SUCCESS != CU_initialize_registry()) {
         return CU_get_error();
+    }
 
     /* Add a suite to the registry */
     pSuite = CU_add_suite("test_OSAL_APIInit", init_suite, clean_suite);

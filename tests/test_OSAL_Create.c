@@ -21,16 +21,16 @@ int clean_suite(void) {
 
 void testOSAL_Create_file_name_too_long() {
     const char filePath[OSAL_PATH_MAX_LENGTH] = "";
-    char name[OSAL_FILE_NAME_MAX_LENGHT+1];
+    char name[OSAL_FILE_NAME_MAX_LENGTH+1];
     char* access;
     int i = 0;
-    while(OSAL_FILE_NAME_MAX_LENGHT+1>strlen(name))
+    while(OSAL_FILE_NAME_MAX_LENGTH + 1 > strlen(name))
     {
         name[i] = "a";
         i++;
     }
     access = "r";
-    HANDLE* file = OSAL_Create(filePath,name, access);
+    HANDLE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
     CloseHandle(file);
 }
@@ -41,7 +41,7 @@ void testOSAL_Create_file_name_too_short() {
     char* access;
     name = "";
     access = "r";
-    HANDLE* file = OSAL_Create(filePath,name, access);
+    HANDLE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
     CloseHandle(file);
 }
@@ -52,7 +52,7 @@ void testOSAL_Create_access_rights_missing() {
     char* name;
     access = "";
     name = OSAL_FILE_NAME;
-    HANDLE* file = OSAL_Create(filePath,name, access);
+    HANDLE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
     CloseHandle(file);
 }
@@ -63,13 +63,14 @@ void testOSAL_Create_access_rights_incorrect() {
     char* name;
     access = "aa";
     name = OSAL_FILE_NAME;
-    HANDLE* file = OSAL_Create(filePath,name,access);
+    HANDLE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
     CloseHandle(file);
 }
 
 void testOSAL_Create_file_with_read_access_correct() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     char* access = "r";
     char* name = OSAL_FILE_NAME;
     char* path = "";
@@ -80,7 +81,8 @@ void testOSAL_Create_file_with_read_access_correct() {
 }
 
 void testOSAL_Create_file_with_write_access_correct() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     char* access = "w";
     char* name = OSAL_FILE_NAME;
     char* path = "";
@@ -91,7 +93,8 @@ void testOSAL_Create_file_with_write_access_correct() {
 }
 
 void testOSAL_Create_file_with_read_and_write_access_correct() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     char* access = "r/w";
     char* name = OSAL_FILE_NAME;
     char* path = "";
@@ -102,25 +105,27 @@ void testOSAL_Create_file_with_read_and_write_access_correct() {
 }
 
 void testOSAL_Create_duplicate() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     char* access = "r";
     char* name = OSAL_FILE_NAME;
     char* path = "";
     HANDLE* file = OSAL_Create(path, name, access);
     CU_ASSERT_PTR_NOT_NULL(file);
-    
+
     char* name1 = OSAL_FILE_NAME;
     char* access1 = "r";
     char* path1 = "";
     HANDLE* file1 = OSAL_Create(path1, name1, access1);
-    CU_ASSERT_PTR_NULL(file1);        
+    CU_ASSERT_PTR_NULL(file1);
     CloseHandle(file);
     CloseHandle(file1);
     DeleteFileA(filePath);
 }
 
 void testOSAL_Create_file_with_relative_path_correct() {
-    char filePath[OSAL_FILE_NAME_MAX_LENGHT] = "C:\\Temp\\folder";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "folder");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     char* access = "r";
     char* name = OSAL_FILE_NAME;
@@ -164,7 +169,7 @@ int main() {
         (NULL == CU_add_test(pSuite, "testOSAL_Create_file_with_read_access_correct", testOSAL_Create_file_with_read_access_correct))||
         (NULL == CU_add_test(pSuite, "testOSAL_Create_file_with_write_access_correct", testOSAL_Create_file_with_write_access_correct))||
         (NULL == CU_add_test(pSuite, "testOSAL_Create_file_with_read_and_write_access_correct", testOSAL_Create_file_with_read_and_write_access_correct))||
-        (NULL == CU_add_test(pSuite, "testOSAL_Create_duplicate", testOSAL_Create_duplicate))||  
+        (NULL == CU_add_test(pSuite, "testOSAL_Create_duplicate", testOSAL_Create_duplicate))||
         (NULL == CU_add_test(pSuite, "testOSAL_Create_file_with_relative_path_correct", testOSAL_Create_file_with_relative_path_correct))||
         (NULL == CU_add_test(pSuite, "testOSAL_Create_no_path", testOSAL_Create_no_path))   ){
         CU_cleanup_registry();

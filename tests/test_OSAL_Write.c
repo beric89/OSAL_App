@@ -23,7 +23,8 @@ int clean_suite(void) {
 }
 
 void testOSAL_Write_file_access_read() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ,
@@ -31,8 +32,7 @@ void testOSAL_Write_file_access_read() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
+        NULL);
 
     CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_FAIL);
     CloseHandle(file);
@@ -40,7 +40,8 @@ void testOSAL_Write_file_access_read() {
 }
 
 void testOSAL_Write_empty_text_for_write() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ,
@@ -48,16 +49,16 @@ void testOSAL_Write_empty_text_for_write() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
-    
+        NULL);
+
     CU_ASSERT_EQUAL(OSAL_Write(file, ""), OSAL_FAIL);
     CloseHandle(file);
     DeleteFileA(filePath);
 }
 
 void testOSAL_Write_file_with_write_access() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,
         GENERIC_WRITE,
@@ -65,16 +66,16 @@ void testOSAL_Write_file_with_write_access() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
-    
+        NULL);
+
     CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_OK);
     CloseHandle(file);
     DeleteFileA(filePath);
 }
 
 void testOSAL_Write_file_with_read_write_access() {
-    const char filePath[OSAL_PATH_MAX_LENGTH] = "C:\\Temp\\test.txt";
+    char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,
         GENERIC_READ | GENERIC_WRITE,
@@ -82,9 +83,8 @@ void testOSAL_Write_file_with_read_write_access() {
         NULL,
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL
-        );
-    
+        NULL);
+
     CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_OK);
     CloseHandle(file);
     DeleteFileA(filePath);
