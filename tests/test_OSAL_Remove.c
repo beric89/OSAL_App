@@ -47,48 +47,28 @@ void testOSAL_Remove_file_not_exists() {
 
 void testOSAL_Remove_file_with_read_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
-        filePath,
-        GENERIC_READ,
-        FILE_SHARE_READ,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-    CloseHandle(file);
+    FILE* file = fopen(filePath, "w");
+    fclose(file);
     CU_ASSERT_EQUAL(OSAL_Remove("", OSAL_FILE_NAME), OSAL_OK);
 }
 
 void testOSAL_Remove_file_with_write_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    OSAL_APIInit();
-    HANDLE file = CreateFile(
-        filePath,
-        GENERIC_WRITE,
-        FILE_SHARE_WRITE,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-    CloseHandle(file);
+    FILE* file = fopen(filePath, "w");
+    fclose(file);
     CU_ASSERT_EQUAL(OSAL_Remove("", OSAL_FILE_NAME), OSAL_OK);
 }
 
 void testOSAL_Remove_file_with_read_and_write_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    OSAL_APIInit();
-    HANDLE file = CreateFile(
-        filePath,
-        GENERIC_READ | GENERIC_WRITE,
-        FILE_SHARE_READ | FILE_SHARE_WRITE,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-    CloseHandle(file);
+    FILE* file = fopen(filePath, "w");
+    fclose(file);
     CU_ASSERT_EQUAL(OSAL_Remove("", OSAL_FILE_NAME), OSAL_OK);
 }
 

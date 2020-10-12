@@ -21,6 +21,7 @@ int clean_suite(void) {
 
 void testOSAL_Create_Directory_valid_name() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, "TESTtest");
     CU_ASSERT_EQUAL(OSAL_CreateDirectory("", "TESTtest"), OSAL_OK);
     RemoveDirectoryA(filePath);
@@ -43,6 +44,7 @@ void testOSAL_Create_Directory_name_too_long() {
 
 void testOSAL_Create_Directory_exists() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, "TESTtest");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     CU_ASSERT_EQUAL(OSAL_CreateDirectory("", "TESTtest"), OSAL_FAIL);
@@ -51,14 +53,19 @@ void testOSAL_Create_Directory_exists() {
 
 void testOSAL_Create_Directory_path_exists() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
-    strcat(filePath, "TESTtest");
+    strcat(filePath, "\\");
+    strcat(filePath, OSAL_DIRECTORY_NAME);
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     strcat(filePath, "\\p");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     strcat(filePath, "\\pp");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     CU_ASSERT_EQUAL(OSAL_CreateDirectory("TESTtest p", "pp"), OSAL_FAIL);
-    CU_ASSERT_EQUAL(system("cd C:\\Temp\\ && rmdir /Q /S TESTtest"), 0);
+    char removePath[OSAL_PATH_MAX_LENGTH] = "cd ";
+    strcat(removePath, OSAL_APIINIT_ADDRESS);
+    strcat(removePath, "\\ && rmdir /Q /S ");
+    strcat(removePath, OSAL_DIRECTORY_NAME);
+    CU_ASSERT_EQUAL(system(removePath), 0);
 }
 
 void testOSAL_Create_Directory_path_not_exists() {

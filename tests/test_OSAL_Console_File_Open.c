@@ -35,8 +35,8 @@ void testOSAL_Console_File_Open_empty_file_name() {
 }
 
 void testOSAL_Console_File_Open_read_file() {
-    // TODO: Treba ipak u testovima ovakav pristup, jer ce, ako zakucamo adresu na 'C:\\Temp\\text.txt', testovi da padaju u slucaju da promijenimo OSAL_APIINIT_ADDRESS
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
     HANDLE file = CreateFile(
         filePath,

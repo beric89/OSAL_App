@@ -23,8 +23,9 @@ void testOSAL_Open_file_not_exists() {
     const char filePath[OSAL_PATH_MAX_LENGTH] = "";
     char* name = OSAL_FILE_NAME;
     char* access = "w";
-    int openResult = OSAL_Open(filePath, name, access);
-    CU_ASSERT_PTR_NULL(openResult);
+    FILE* file = OSAL_Open(filePath, name, access);
+    CU_ASSERT_PTR_NULL(file);
+    fclose(file);
 }
 
 void testOSAL_Open_file_name_too_long() {
@@ -37,30 +38,34 @@ void testOSAL_Open_file_name_too_long() {
         i++;
     }
     char* access = "w";
-    int openResult = OSAL_Open(filePath, name, access);
-    CU_ASSERT_PTR_NULL(openResult);
+    FILE* file = OSAL_Open(filePath, name, access);
+    CU_ASSERT_PTR_NULL(file);
+    fclose(file);
 }
 
 void testOSAL_Open_file_name_too_short() {
     const char filePath[OSAL_PATH_MAX_LENGTH] = "";
     char* name = "";
     char* access = "w";
-    int openResult = OSAL_Open(filePath, name, access);
-    CU_ASSERT_PTR_NULL(openResult);
+    FILE* file = OSAL_Open(filePath, name, access);
+    CU_ASSERT_PTR_NULL(file);
+    fclose(file);
 }
 
 void testOSAL_Open_access_rights_missing() {
     const char filePath[OSAL_PATH_MAX_LENGTH] = "";
     char* name = OSAL_FILE_NAME;
     char* access = "";
-    int openResult = OSAL_Open(filePath, name, access);
-    CU_ASSERT_PTR_NULL(openResult);
+    FILE* file = OSAL_Open(filePath, name, access);
+    CU_ASSERT_PTR_NULL(file);
+    fclose(file);
 }
 
 void testOSAL_Open_file_with_read_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
+    HANDLE hFile = CreateFile(
         filePath,
         GENERIC_READ,
         FILE_SHARE_READ,
@@ -69,20 +74,21 @@ void testOSAL_Open_file_with_read_access_correct() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
 
-    CloseHandle(file);
+    CloseHandle(hFile);
 
-    file = OSAL_Open("", OSAL_FILE_NAME, "r");
+    FILE* file = OSAL_Open("", OSAL_FILE_NAME, "r");
     CU_ASSERT_PTR_NOT_EQUAL(file, ERROR_FILE_NOT_FOUND);
     CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
     CU_ASSERT_PTR_NOT_NULL(file);
-    CloseHandle(file);
+    fclose(file);
     DeleteFileA(filePath);
 }
 
 void testOSAL_Open_file_with_write_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
+    HANDLE hFile = CreateFile(
         filePath,
         GENERIC_WRITE,
         FILE_SHARE_WRITE,
@@ -91,20 +97,21 @@ void testOSAL_Open_file_with_write_access_correct() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
 
-    CloseHandle(file);
+    CloseHandle(hFile);
 
-    file = OSAL_Open("", OSAL_FILE_NAME, "r");
+    FILE* file = OSAL_Open("", OSAL_FILE_NAME, "r");
     CU_ASSERT_PTR_NOT_EQUAL(file, ERROR_FILE_NOT_FOUND);
     CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
     CU_ASSERT_PTR_NOT_NULL(file);
-    CloseHandle(file);
+    fclose(file);
     DeleteFileA(filePath);
 }
 
 void testOSAL_Open_file_with_read_and_write_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
+    HANDLE hFile = CreateFile(
         filePath,
         GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -113,13 +120,13 @@ void testOSAL_Open_file_with_read_and_write_access_correct() {
         FILE_ATTRIBUTE_NORMAL,
         NULL);
 
-    CloseHandle(file);
+    CloseHandle(hFile);
 
-    file = OSAL_Open("", OSAL_FILE_NAME, "r");
+    FILE* file = OSAL_Open("", OSAL_FILE_NAME, "r");
     CU_ASSERT_PTR_NOT_EQUAL(file, ERROR_FILE_NOT_FOUND);
     CU_ASSERT_PTR_NOT_EQUAL(file, INVALID_HANDLE_VALUE);
     CU_ASSERT_PTR_NOT_NULL(file);
-    CloseHandle(file);
+    fclose(file);
     DeleteFileA(filePath);
 }
 

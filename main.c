@@ -17,8 +17,8 @@
 #include <windows.h>
 #include <string.h>
 #include "OSAL.h"
-
-
+#include <io.h>
+#include <fcntl.h>
 /*
  * 
  */
@@ -33,7 +33,7 @@ int main(void){
     OSAL_CreateDirectory("folder", "opet");
     
     // primjer kreiranje fajla "test.txt" u C:\Temp\folder\opet
-    HANDLE f = OSAL_Create("folder opet","test.txt", "r/w");
+    FILE* f = OSAL_Create("folder opet","test.txt", "r/w");
     
     // primjer zatvaranja fajla "test.txt" u C:\Temp\folder\opet
     OSAL_Close(f);
@@ -48,8 +48,8 @@ int main(void){
     // primjer otvaranja, citanja i zatvaranja fajla "test.txt" u C:\Temp\folder\opet
     f = OSAL_Open("folder opet",  "test.txt", "r");
     char buffer[15];
-    OSAL_Read(f, buffer, GetFileSize(f, NULL), 2);
-    printf("%s\n", buffer);
+    OSAL_Read(f, buffer, strlen("test test test!"), 2);
+    printf("buffer: %s\n", buffer);
     OSAL_Close(f);
     
     // primjer kreiranje foldera "brisi" u C:\Temp\folder\opet

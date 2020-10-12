@@ -30,9 +30,9 @@ void testOSAL_Create_file_name_too_long() {
         i++;
     }
     access = "r";
-    HANDLE* file = OSAL_Create(filePath, name, access);
+    FILE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
-    CloseHandle(file);
+    fclose(file);
 }
 
 void testOSAL_Create_file_name_too_short() {
@@ -41,9 +41,9 @@ void testOSAL_Create_file_name_too_short() {
     char* access;
     name = "";
     access = "r";
-    HANDLE* file = OSAL_Create(filePath, name, access);
+    FILE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
-    CloseHandle(file);
+    fclose(file);
 }
 
 void testOSAL_Create_access_rights_missing() {
@@ -52,9 +52,9 @@ void testOSAL_Create_access_rights_missing() {
     char* name;
     access = "";
     name = OSAL_FILE_NAME;
-    HANDLE* file = OSAL_Create(filePath, name, access);
+    FILE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
-    CloseHandle(file);
+    fclose(file);
 }
 
 void testOSAL_Create_access_rights_incorrect() {
@@ -63,76 +63,81 @@ void testOSAL_Create_access_rights_incorrect() {
     char* name;
     access = "aa";
     name = OSAL_FILE_NAME;
-    HANDLE* file = OSAL_Create(filePath, name, access);
+    FILE* file = OSAL_Create(filePath, name, access);
     CU_ASSERT_PTR_NULL(file);
-    CloseHandle(file);
+    fclose(file);
 }
 
 void testOSAL_Create_file_with_read_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
     char* access = "r";
     char* name = OSAL_FILE_NAME;
     char* path = "";
-    HANDLE* file = OSAL_Create(path, name, access);
+    FILE* file = OSAL_Create(path, name, access);
     CU_ASSERT_PTR_NOT_NULL(file);
-    CloseHandle(file);
-    DeleteFileA(filePath);
+    fclose(file);
+    remove(filePath);
 }
 
 void testOSAL_Create_file_with_write_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
     char* access = "w";
     char* name = OSAL_FILE_NAME;
     char* path = "";
-    HANDLE* file = OSAL_Create(path, name, access);
+    FILE* file = OSAL_Create(path, name, access);
     CU_ASSERT_PTR_NOT_NULL(file);
-    CloseHandle(file);
-    DeleteFileA(filePath);
+    fclose(file);
+    remove(filePath);
 }
 
 void testOSAL_Create_file_with_read_and_write_access_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
     char* access = "r/w";
     char* name = OSAL_FILE_NAME;
     char* path = "";
-    HANDLE* file = OSAL_Create(path, name, access);
+    FILE* file = OSAL_Create(path, name, access);
     CU_ASSERT_PTR_NOT_NULL(file);
-    CloseHandle(file);
-    DeleteFileA(filePath);
+    fclose(file);
+    remove(filePath);
 }
 
 void testOSAL_Create_duplicate() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
     char* access = "r";
     char* name = OSAL_FILE_NAME;
     char* path = "";
-    HANDLE* file = OSAL_Create(path, name, access);
+    FILE* file = OSAL_Create(path, name, access);
     CU_ASSERT_PTR_NOT_NULL(file);
 
     char* name1 = OSAL_FILE_NAME;
     char* access1 = "r";
     char* path1 = "";
-    HANDLE* file1 = OSAL_Create(path1, name1, access1);
+    FILE* file1 = OSAL_Create(path1, name1, access1);
     CU_ASSERT_PTR_NULL(file1);
-    CloseHandle(file);
-    CloseHandle(file1);
-    DeleteFileA(filePath);
+    fclose(file);
+    fclose(file1);
+    remove(filePath);
 }
 
 void testOSAL_Create_file_with_relative_path_correct() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, "folder");
     CU_ASSERT_TRUE(CreateDirectoryA(filePath, NULL));
     char* access = "r";
     char* name = OSAL_FILE_NAME;
     char* path = "folder";
-    HANDLE* file = OSAL_Create(path, name, access);
+    FILE* file = OSAL_Create(path, name, access);
     CU_ASSERT_PTR_NOT_NULL(file);
-    CloseHandle(file);
+    fclose(file);
     CU_ASSERT_EQUAL(system("cd C:\\Temp\\ && rmdir /Q /S folder"), 0);
 }
 
@@ -142,9 +147,9 @@ void testOSAL_Create_no_path() {
     char* name;
     access = "r";
     name = OSAL_FILE_NAME;
-    HANDLE* file = OSAL_Create(filePath,name,access);
+    FILE* file = OSAL_Create(filePath,name,access);
     CU_ASSERT_PTR_NULL(file);
-    CloseHandle(file);
+    fclose(file);
 }
 
 int main() {

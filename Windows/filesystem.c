@@ -1,6 +1,40 @@
 #include "filesystem.h"
+#include <windows.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <io.h>
+
+static HANDLE* fileToHandle (FILE* file)
+{
+    if(file == NULL)
+    {
+        return NULL;
+    }
+    int myFile = _fileno(file);
+    HANDLE* hFile = _get_osfhandle(myFile);
+    return hFile;
+}
+
+static FILE* handleToFile (HANDLE* hFile, char* access)
+{
+    int myFile;
+    if(!strcmp(access, "r"))
+    {
+        myFile = _open_osfhandle((long)hFile, _O_RDONLY);
+    }
+    else if(!strcmp(access, "w"))
+    {
+        myFile = _open_osfhandle((long)hFile, _O_APPEND);
+    }
+    else
+    {
+        myFile = _open_osfhandle((long)hFile, _O_TEXT);
+    }
+    FILE* file = _fdopen(myFile, "w");
+    return file;
+}
+
 
 static OSAL_ReturnType nameValidation(char *name){
     if(strlen(name) == OSAL_FILE_NAME_MIN_LENGTH || strlen(name) > OSAL_FILE_NAME_MAX_LENGTH)
@@ -122,7 +156,7 @@ static int checkIfFileExists(char* filePath, char* name){
     }
 }
 
-HANDLE* OSAL_Create(char* filePath, char* name, char* access){
+FILE* OSAL_Create(char* filePath, char* name, char* access){
     char* fileConvertPath;
     fileConvertPath = convertPath(filePath);
     fileConvertPath = makePath(fileConvertPath, name);
@@ -146,7 +180,7 @@ HANDLE* OSAL_Create(char* filePath, char* name, char* access){
         NULL);
     if(checkFileHandle(file) == OSAL_OK)
     {
-        return file;
+        return handleToFile(file, access);
     }
     else
     {
@@ -171,7 +205,6 @@ OSAL_ReturnType OSAL_ConsoleFileOpen(char* filePath, char* name){
     strcat(filePathOpen, fileConvertPath);
     strcat(filePathOpen, " && ");
     strcat(filePathOpen, name);
-    printf("%s\n", filePathOpen);
     if((system(filePathOpen) == 0))
     {
         return OSAL_OK;
@@ -209,7 +242,7 @@ OSAL_ReturnType OSAL_Remove(char* filePath, char* name){
     }
 }
 
-HANDLE* OSAL_Open(char* filePath, char* name, char* access)
+FILE* OSAL_Open(char* filePath, char* name, char* access)
 {
     if (nameValidation(name) != OSAL_OK)
     {
@@ -237,7 +270,7 @@ HANDLE* OSAL_Open(char* filePath, char* name, char* access)
 
     if(checkFileHandle(file) == OSAL_OK)
     {
-        return file;
+        return handleToFile(file, access);
     }
     else
     {
@@ -245,9 +278,10 @@ HANDLE* OSAL_Open(char* filePath, char* name, char* access)
     }
 }
 
-OSAL_ReturnType OSAL_Close(HANDLE* file)
+OSAL_ReturnType OSAL_Close(FILE* file)
 {
-    if(CloseHandle(file) == 0)
+    HANDLE hfile = fileToHandle(file);
+    if(CloseHandle(hfile) == OSAL_FALSE)
     {
         return OSAL_FAIL;
     }
@@ -258,8 +292,9 @@ OSAL_ReturnType OSAL_Close(HANDLE* file)
 
 }
 
-OSAL_ReturnType OSAL_Write(HANDLE* file, char* buffer)
+OSAL_ReturnType OSAL_Write(FILE* file, char* buffer)
 {
+    HANDLE* hFile = fileToHandle(file);
     if (strlen(buffer) == OSAL_FALSE)
     {
         return OSAL_FAIL;
@@ -269,7 +304,7 @@ OSAL_ReturnType OSAL_Write(HANDLE* file, char* buffer)
     DWORD dwBytesWritten = 0;
 
     int writeResult = WriteFile(
-                    file,
+                    hFile,
                     buffer,
                     dwBytesToWrite,
                     &dwBytesWritten,
@@ -292,23 +327,24 @@ OSAL_ReturnType OSAL_Write(HANDLE* file, char* buffer)
     }
 }
 
-OSAL_ReturnType OSAL_Read(HANDLE* File, char* buffer, int numberOfBytesToRead, int position)
+OSAL_ReturnType OSAL_Read(FILE* file, char* buffer, int numberOfBytesToRead, int position)
 {
    if(position > numberOfBytesToRead)
    {
        return OSAL_FAIL;
    }
-   if(File == NULL)
+   HANDLE* hFile = fileToHandle(file);
+   if(hFile == NULL)
    {
        return OSAL_FAIL;
    }
-   if(numberOfBytesToRead > GetFileSize(File, NULL))
+   if(numberOfBytesToRead > GetFileSize(hFile, NULL))
    {
        return OSAL_FAIL;
    }
-   SetFilePointer(File, position, NULL, 0);
+   SetFilePointer(hFile, position, NULL, 0);
    DWORD dwBytesRead;
-   ReadFile(File, buffer, numberOfBytesToRead - position, &dwBytesRead, NULL);
+   ReadFile(hFile, buffer, numberOfBytesToRead - position, &dwBytesRead, NULL);
    buffer[numberOfBytesToRead - position] = '\0';
    return OSAL_OK;
 }

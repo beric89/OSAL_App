@@ -24,70 +24,44 @@ int clean_suite(void) {
 
 void testOSAL_Write_file_access_read() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
-        filePath,
-        GENERIC_READ,
-        FILE_SHARE_READ,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-
+    FILE* file = fopen(filePath, "w+");
+    fclose(file);
+    file = fopen(filePath, "r");
     CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_FAIL);
-    CloseHandle(file);
-    DeleteFileA(filePath);
+    fclose(file);
+    remove(filePath);
 }
 
 void testOSAL_Write_empty_text_for_write() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
-        filePath,
-        GENERIC_READ,
-        FILE_SHARE_READ,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-
+    FILE* file = fopen(filePath, "w");
     CU_ASSERT_EQUAL(OSAL_Write(file, ""), OSAL_FAIL);
-    CloseHandle(file);
-    DeleteFileA(filePath);
+    fclose(file);
+    remove(filePath);
 }
 
 void testOSAL_Write_file_with_write_access() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
-        filePath,
-        GENERIC_WRITE,
-        FILE_SHARE_WRITE,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-
+    FILE* file = fopen(filePath, "w");
     CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_OK);
-    CloseHandle(file);
-    DeleteFileA(filePath);
+    fclose(file);
+    remove(filePath);
 }
 
 void testOSAL_Write_file_with_read_write_access() {
     char filePath[OSAL_PATH_MAX_LENGTH] = OSAL_APIINIT_ADDRESS;
+    strcat(filePath, "\\");
     strcat(filePath, OSAL_FILE_NAME);
-    HANDLE file = CreateFile(
-        filePath,
-        GENERIC_READ | GENERIC_WRITE,
-        FILE_SHARE_READ | FILE_SHARE_WRITE,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-
+    FILE* file = fopen(filePath, "a+");
     CU_ASSERT_EQUAL(OSAL_Write(file, OSAL_WRITE_TEXT), OSAL_OK);
-    CloseHandle(file);
-    DeleteFileA(filePath);
+    fclose(file);
+    remove(filePath);
 }
 
 int main() {
