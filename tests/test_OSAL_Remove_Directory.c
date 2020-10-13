@@ -6,6 +6,9 @@
  */
 
 #include "../OSALTestHeader.h"
+#include "../Windows\OSALInit.h"
+#include "../Windows\filesystem.h"
+
 /*
  * CUnit Test Suite
  */

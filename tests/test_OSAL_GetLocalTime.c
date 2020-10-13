@@ -3,6 +3,8 @@
  */
 
 #include "../OSALTestHeader.h"
+#include "../Windows\OSALInit.h"
+#include "../Windows\clock.h"
 int init_suite(void) {
     return 0;
 }

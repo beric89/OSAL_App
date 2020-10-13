@@ -6,6 +6,8 @@
  */
 
 #include "../OSALTestHeader.h"
+#include "../Windows\OSALInit.h"
+#include "../Windows\clock.h"
 /*
  * CUnit Test Suite
  */
